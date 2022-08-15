@@ -45,7 +45,7 @@ func TestCreateAccount(t *testing.T) {
 
 func setup() {
 	sc := safeheron.Client{Config: safeheron.ApiConfig{
-		BaseUrl:               "https://api.91aql.com",
+		BaseUrl:               "https://api.safeheron.vip",
 		ApiKey:                "d1ad6a******1ba572e7",
 		RsaPrivateKey:         "pems/my_private.pem",
 		SafeheronRsaPublicKey: "pems/safeheron_public.pem",
