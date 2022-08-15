@@ -1,0 +1,8 @@
+# intellij files
+.idea/
+vendor/
+.DS_Store
+.vscode
+# vim temp files
+*.swp
+.go-version
