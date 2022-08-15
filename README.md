@@ -67,7 +67,7 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
 * Construct `safeheron.ApiConfig` 
     ```go
     sc := safeheron.Client{Config: safeheron.ApiConfig{
-            BaseUrl:               "https://api.91aql.com",
+            BaseUrl:               "https://api.safeheron.vip",
             ApiKey:                "d1ad6*****a572e7",
             RsaPrivateKey:         "pems/my_private.pem",
             SafeheronRsaPublicKey: "pems/safeheron_public.pem",
