@@ -123,6 +123,7 @@ func createTransaction(value float64, to string, data []byte) *types.Transaction
 
 	// Estimate gas
 	gasLimit, _ := client.EstimateGas(context.Background(), ethereum.CallMsg{
+		From: fromAddress,
 		To:   &toAddress,
 		Data: data,
 	})
