@@ -1,4 +1,4 @@
-package api_demo
+package account_api_demo
 
 import (
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
@@ -7,8 +7,6 @@ import (
 type AccountApi struct {
 	Client safeheron.Client
 }
-
-const listpath = "/v1/account/list"
 
 type ListAccountRequest struct {
 	PageNumber int    `json:"pageNumber,omitempty"`
@@ -39,10 +37,8 @@ type ListAccountResponse struct {
 }
 
 func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) error {
-	return e.Client.SendRequest(d, r, listpath)
+	return e.Client.SendRequest(d, r, "/v1/account/list")
 }
-
-const createpath = "/v1/account/create"
 
 type CreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
@@ -58,5 +54,20 @@ type CreateAccountResponse struct {
 }
 
 func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountResponse) error {
-	return e.Client.SendRequest(d, r, createpath)
+	return e.Client.SendRequest(d, r, "/v1/account/create")
+}
+
+type AddCoinRequest struct {
+	CoinKey    string `json:"coinKey,omitempty"`
+	AccountKey string `json:"accountKey,omitempty"`
+}
+
+type AddCoinResponse []struct {
+	Address     string `json:"address,omitempty"`
+	AddressType string `json:"addressType,omitempty"`
+	AmlLock     string `json:"amlLock,omitempty"`
+}
+
+func (e *AccountApi) AddCoin(d AddCoinRequest, r *AddCoinResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/coin/create")
 }

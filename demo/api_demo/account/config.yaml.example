@@ -1,0 +1,8 @@
+# your api key, your can get it from Safeheron web console: https://www.safeheron.com/console.
+apiKey: 080d*****06e60
+# path to your private key file, pem encoded
+privateKeyPemFile: path/to/your/privateKey.pem
+# path to Safeheron api public key file, pem encoded, your can get it from Safeheron web console: https://www.safeheron.com/console.
+safeheronPublicKeyPemFile: path/to/safeheron/publicKey.pem
+# Safeheron api url
+baseUrl: https://api.safeheron.vip

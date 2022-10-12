@@ -66,6 +66,7 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     ```
 * Construct `safeheron.ApiConfig` 
     ```go
+    // You can get `ApiKey` and `SafeheronRsaPublicKey` from Safeheron Web Console: https://www.safeheron.com/console.
     sc := safeheron.Client{Config: safeheron.ApiConfig{
             BaseUrl:               "https://api.91aql.com",
             ApiKey:                "d1ad6*****a572e7",
@@ -90,4 +91,78 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     // Your code to process response
     ...
     ...
+    ```
+
+# Test
+
+## Test Create Wallet Account
+* Before run the test code, modify `demo/api_demo/account/config.yaml.example` according to the comments
+    ```yaml
+    # Your API key, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    apiKey: 080db****6e60
+    # path to your private key file, pem encoded
+    privateKeyPemFile: /path/to/your/privatekey.pem
+    # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
+    # Safeheron API base url
+    baseUrl: https://api.safeheron.vip
+    ```
+* Run the test
+    ```bash
+    $ cd demo/api_demo/account
+    $ cp config.yaml.example config.yaml
+    $ go test -run TestCreateAccountAndAddCoin
+    ```
+
+## Test Send A Transaction
+* Before run the test code, modify `demo/api_demo/transaction/config.yaml.example` according to the comments
+    ```yaml
+    # Your API key, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    apiKey: 080db****6e60
+    # path to your private key file, pem encoded
+    privateKeyPemFile: /path/to/your/privatekey.pem
+    # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
+    # Safeheron API base url
+    baseUrl: https://api.safeheron.vip
+    # Wallet Account key
+    accountKey: account****5ecad40
+    # To address
+    destinationAddress: 0x9437A****0BF95f5
+    ```
+* Run the test
+    ```bash
+    $ cd demo/api_demo/transaction
+    $ cp config.yaml.example config.yaml
+    $ go test -run TestSendTransaction
+    ```
+
+## Test MPC Sign
+* Before run the test code, modify `demo/mpc_demo/config.yaml.example` according to the comments
+    ```yaml
+    # Your API key, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    apiKey: 080db****6e60
+    # path to your private key file, pem encoded
+    privateKeyPemFile: /path/to/your/privatekey.pem
+    # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
+    # Safeheron API base url
+    baseUrl: https://api.safeheron.vip
+    # Wallet Account key
+    accountKey: account****5ecad40
+    # Goerli testnet token address in wallet account
+    accountTokenAddress: 0x970****4ffD59
+    # erc20 token contract address
+    erc20ContractAddress: 0x078****Eaa37F
+    # address to receive token
+    toAddress: 0x53B****321789
+    # Ethereum RPC API
+    ethereumRpcApi: https://goerli.infura.io/v3/802******bc2fcb
+    ```
+
+* Run the test
+    ```bash
+    $ cd demo/mpc_demo
+    $ cp config.yaml.example config.yaml
+    $ go test -run TestMpcSgin
     ```

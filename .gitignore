@@ -6,3 +6,4 @@ vendor/
 # vim temp files
 *.swp
 .go-version
+*.yaml

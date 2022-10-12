@@ -1,0 +1,12 @@
+# Your API key, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+apiKey: 080db****6e60
+# path to your private key file, pem encoded
+privateKeyPemFile: /path/to/your/privatekey.pem
+# path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
+# Safeheron API base url
+baseUrl: https://api.safeheron.vip
+# Wallet Account key
+accountKey: account****5ecad40
+# To address
+destinationAddress: 0x9437A****0BF95f5
