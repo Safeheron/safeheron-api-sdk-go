@@ -68,7 +68,7 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     ```go
     // You can get `ApiKey` and `SafeheronRsaPublicKey` from Safeheron Web Console: https://www.safeheron.com/console.
     sc := safeheron.Client{Config: safeheron.ApiConfig{
-            BaseUrl:               "https://api.91aql.com",
+            BaseUrl:               "https://api.safeheron.vip",
             ApiKey:                "d1ad6*****a572e7",
             RsaPrivateKey:         "pems/my_private.pem",
             SafeheronRsaPublicKey: "pems/safeheron_public.pem",
