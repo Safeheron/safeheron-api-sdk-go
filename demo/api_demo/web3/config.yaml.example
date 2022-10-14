@@ -1,0 +1,20 @@
+# Your API key, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+apiKey: 080db****6e60
+# path to your private key file, pem encoded
+privateKeyPemFile: /path/to/your/privatekey.pem
+# path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
+# Safeheron API base url
+baseUrl: https://api.safeheron.vip
+# Wallet Account key
+accountKey: account3****567ee51b
+# EVM address in Wallet Account
+evmAddress: 0x08cAA****95715657c8
+# contract address
+contractAddress: 0x07865c6E87B9F70255377e024ace6630C1Eaa37F
+# contract hex data, start with '0x' prefix
+contractFunctionData: 0xa9059c****000000000f4240
+# amount
+amount: 
+# Ethereum RPC API, example: https://goerli.infura.io/v3/802******bc2fcb
+ethereumRpcApi: https://goerli.infura.io/v3/802679315d0441069fec1ee3d2bc2fcb
