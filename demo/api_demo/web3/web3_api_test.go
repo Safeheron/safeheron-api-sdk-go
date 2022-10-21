@@ -47,9 +47,9 @@ func TestCreateWeb3Account(t *testing.T) {
 /*
 1. Modify demo/api_demo/web3/config.yaml.example according to the comments
 2. Execute Command: cp config.yaml.example config.yaml
-3. Execute Command: go test -run TestEthSignTransaction
+3. Execute Command: go test -run TestSignTransaction
 */
-func TestEthSignTransaction(t *testing.T) {
+func TestSignTransaction(t *testing.T) {
 	// Create Raw Transaction
 	rawTransaction := createTransaction(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
 	txString, _ := json.Marshal(rawTransaction)
@@ -127,9 +127,9 @@ func createTransaction(from string, value float64, to string, data string) *type
 /*
 1. Modify demo/api_demo/web3/config.yaml.example according to the comments
 2. Execute Command: cp config.yaml.example config.yaml
-3. Execute Command: go test -run TestEthSignTransactionForBSC
+3. Execute Command: go test -run TestLegacyTxSignTransaction
 */
-func TestForBSCEthSignTransaction(t *testing.T) {
+func TestLegacyTxSignTransaction(t *testing.T) {
 	// Create Raw Transaction
 	rawTransaction := createLegacyTx(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
 	txString, _ := json.Marshal(rawTransaction)
