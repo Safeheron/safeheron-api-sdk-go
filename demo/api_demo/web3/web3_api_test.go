@@ -141,7 +141,7 @@ func TestForBSCEthSignTransaction(t *testing.T) {
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
 		rawTransaction.To().String(), rawTransaction.Value().String(),
-		chainId.String(), strconv.FormatUint(uint64(rawTransaction.GasPrice().TrailingZeroBits()), 10), rawTransaction.Gas(),
+		chainId.String(), rawTransaction.GasPrice().String(), rawTransaction.Gas(),
 		"", "",
 		rawTransaction.Nonce(), string(rawTransaction.Data()))
 
