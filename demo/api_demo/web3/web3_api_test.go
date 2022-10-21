@@ -52,14 +52,16 @@ func TestCreateWeb3Account(t *testing.T) {
 func TestEthSignTransaction(t *testing.T) {
 	// Create Raw Transaction
 	rawTransaction := createTransaction(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
-
+	txString, _ := json.Marshal(rawTransaction)
+	log.Infof("before sign: %s", txString)
 	// Sign transaction with Safeheron
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
 		rawTransaction.To().String(), rawTransaction.Value().String(),
-		rawTransaction.ChainId().String(), rawTransaction.Gas(),
+		rawTransaction.ChainId().String(), "", rawTransaction.Gas(),
 		rawTransaction.GasTipCap().String(), rawTransaction.GasFeeCap().String(),
 		rawTransaction.Nonce(), string(rawTransaction.Data()))
+
 	log.Infof("web3 eth_signTransaction has been created, txKey: %s", txKey)
 
 	// Query
@@ -122,8 +124,80 @@ func createTransaction(from string, value float64, to string, data string) *type
 	return tx
 }
 
+/*
+1. Modify demo/api_demo/web3/config.yaml.example according to the comments
+2. Execute Command: cp config.yaml.example config.yaml
+3. Execute Command: go test -run TestEthSignTransactionForBSC
+*/
+func TestForBSCEthSignTransaction(t *testing.T) {
+	// Create Raw Transaction
+	rawTransaction := createLegacyTx(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
+	txString, _ := json.Marshal(rawTransaction)
+	log.Infof("before sign: %s", txString)
+
+	// get chainId
+	chainId, _ := client.NetworkID(context.Background())
+	// Sign transaction with Safeheron
+	customerRefId := uuid.New().String()
+	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
+		rawTransaction.To().String(), rawTransaction.Value().String(),
+		chainId.String(), strconv.FormatUint(uint64(rawTransaction.GasPrice().TrailingZeroBits()), 10), rawTransaction.Gas(),
+		"", "",
+		rawTransaction.Nonce(), string(rawTransaction.Data()))
+
+	log.Infof("web3 eth_signTransaction has been created, txKey: %s", txKey)
+
+	// Query
+	signedTransaction := queryWeb3Sig(customerRefId)
+	log.Infof("got signed transaction data: %s", signedTransaction)
+
+	// Broadcast
+	txHash := broadcast(signedTransaction, rawTransaction.Type())
+	log.Infof("transaction hash: %s", txHash)
+
+}
+
+func createLegacyTx(from string, value float64, to string, data string) *types.Transaction {
+	fromAddress := common.HexToAddress(from)
+	toAddress := common.HexToAddress(to)
+
+	// Get data from block chain: nonce, gasPrice
+	nonce, _ := client.PendingNonceAt(context.Background(), fromAddress)
+	gasPrice, _ := client.SuggestGasPrice(context.Background())
+
+	// Decode data
+	callData, _ := hex.DecodeString(data[2:])
+
+	// Estimate gas
+	gasLimit, err := client.EstimateGas(context.Background(), ethereum.CallMsg{
+		From:  fromAddress,
+		To:    &toAddress,
+		Value: big.NewInt(0),
+		Data:  callData,
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	// Create raw transaction
+	tx := types.NewTx(&types.LegacyTx{
+		Nonce:    nonce,
+		To:       &toAddress,
+		Value:    big.NewInt(0),
+		Data:     []byte(data),
+		Gas:      gasLimit,
+		GasPrice: gasPrice,
+	})
+
+	jsonTx, _ := json.Marshal(tx)
+	log.Infof("tx json data: %s", string(jsonTx))
+
+	return tx
+}
+
 func createWeb3EthSignTransaction(accountKey string, customerRefId string, to string,
-	value string, chainId string, gasLimit uint64, maxPriorityFeePerGas string,
+	value string, chainId string, gasPrice string, gasLimit uint64, maxPriorityFeePerGas string,
 	maxFeePerGas string, nonce uint64, data string) string {
 	ethSignTransactionRequest := EthSignTransactionRequest{
 		AccountKey:    accountKey,
@@ -143,6 +217,7 @@ func createWeb3EthSignTransaction(accountKey string, customerRefId string, to st
 			Value:                value,
 			ChainId:              chainId,
 			GasLimit:             strconv.FormatUint(gasLimit, 10),
+			GasPrice:             gasPrice,
 			MaxPriorityFeePerGas: maxPriorityFeePerGas,
 			MaxFeePerGas:         maxFeePerGas,
 			Nonce:                strconv.FormatUint(nonce, 10),
@@ -203,6 +278,8 @@ func broadcast(signedTransaction string, txType uint8) string {
 		}
 	}
 
+	txString, _ := json.Marshal(tx)
+	log.Infof("before broadcast: %s", txString)
 	if err := client.SendTransaction(context.Background(), tx); err != nil {
 		panic(fmt.Errorf("broadcast failed. %w", err))
 	}
