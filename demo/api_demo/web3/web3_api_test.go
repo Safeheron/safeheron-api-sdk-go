@@ -53,7 +53,7 @@ func TestSignTransaction(t *testing.T) {
 	// Create Raw Transaction
 	rawTransaction := createTransaction(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
 	txString, _ := json.Marshal(rawTransaction)
-	log.Infof("before sign: %s", txString)
+	log.Infof("Raw transaction data: %s", txString)
 	// Sign transaction with Safeheron
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
@@ -62,15 +62,16 @@ func TestSignTransaction(t *testing.T) {
 		rawTransaction.GasTipCap().String(), rawTransaction.GasFeeCap().String(),
 		rawTransaction.Nonce(), string(rawTransaction.Data()))
 
-	log.Infof("web3 eth_signTransaction has been created, txKey: %s", txKey)
+	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
+	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
 
 	// Query
 	signedTransaction := queryWeb3Sig(customerRefId)
-	log.Infof("got signed transaction data: %s", signedTransaction)
+	log.Infof("Got signed transaction data: %s", signedTransaction)
 
 	// Broadcast
 	txHash := broadcast(signedTransaction, rawTransaction.Type())
-	log.Infof("You can view the transaction at: https://goerli.etherscan.io/tx/%s", txHash)
+	log.Infof("Broadcast success, transaction hash: %s", txHash)
 
 }
 
@@ -118,9 +119,6 @@ func createTransaction(from string, value float64, to string, data string) *type
 		GasFeeCap: maxFeePerGas,
 	})
 
-	jsonTx, _ := json.Marshal(tx)
-	log.Infof("tx json data: %s", string(jsonTx))
-
 	return tx
 }
 
@@ -133,7 +131,7 @@ func TestLegacyTxSignTransaction(t *testing.T) {
 	// Create Raw Transaction
 	rawTransaction := createLegacyTx(viper.GetString("evmAddress"), 0, viper.GetString("contractAddress"), viper.GetString("contractFunctionData"))
 	txString, _ := json.Marshal(rawTransaction)
-	log.Infof("before sign: %s", txString)
+	log.Infof("Raw transaction data: %s", txString)
 
 	// get chainId
 	chainId, _ := client.NetworkID(context.Background())
@@ -145,15 +143,16 @@ func TestLegacyTxSignTransaction(t *testing.T) {
 		"", "",
 		rawTransaction.Nonce(), string(rawTransaction.Data()))
 
-	log.Infof("web3 eth_signTransaction has been created, txKey: %s", txKey)
+	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
+	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
 
 	// Query
 	signedTransaction := queryWeb3Sig(customerRefId)
-	log.Infof("got signed transaction data: %s", signedTransaction)
+	log.Infof("Got signed transaction data: %s", signedTransaction)
 
 	// Broadcast
 	txHash := broadcast(signedTransaction, rawTransaction.Type())
-	log.Infof("transaction hash: %s", txHash)
+	log.Infof("Broadcast success, transaction hash: %s", txHash)
 
 }
 
@@ -189,9 +188,6 @@ func createLegacyTx(from string, value float64, to string, data string) *types.T
 		Gas:      gasLimit,
 		GasPrice: gasPrice,
 	})
-
-	jsonTx, _ := json.Marshal(tx)
-	log.Infof("tx json data: %s", string(jsonTx))
 
 	return tx
 }
@@ -248,19 +244,18 @@ func queryWeb3Sig(customerRefId string) string {
 			panic(fmt.Errorf("failed to query web3 eth_signTransaction result, %w", err))
 		}
 
-		log.Infof(`web3 eth_signTransaction status: %s, sub status: %s`, web3SignQueryResponse.TransactionStatus, web3SignQueryResponse.TransactionSubStatus)
+		log.Infof(`web3 sign task status: %s`, web3SignQueryResponse.TransactionStatus)
 
 		if web3SignQueryResponse.TransactionStatus == "FAILED" || web3SignQueryResponse.TransactionStatus == "REJECTED" {
-			panic(`web3 eth_signTransaction was FAILED or REJECTED`)
-		}
-
-		if web3SignQueryResponse.TransactionStatus == "COMPLETED" {
-			log.Infof("result :%v", web3SignQueryResponse)
+			panic(`web3 sign task was FAILED or REJECTED`)
+		} else if web3SignQueryResponse.TransactionStatus == "COMPLETED" {
 			return web3SignQueryResponse.Transaction.SignedTransaction
+		} else {
+			log.Infof(`will wait another 5 seconds`)
 		}
 	}
 
-	panic("can't get web3 eth_signTransaction sign result.")
+	panic("can't get web3 sign task result.")
 }
 
 func broadcast(signedTransaction string, txType uint8) string {
@@ -278,8 +273,6 @@ func broadcast(signedTransaction string, txType uint8) string {
 		}
 	}
 
-	txString, _ := json.Marshal(tx)
-	log.Infof("before broadcast: %s", txString)
 	if err := client.SendTransaction(context.Background(), tx); err != nil {
 		panic(fmt.Errorf("broadcast failed. %w", err))
 	}
