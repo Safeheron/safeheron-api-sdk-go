@@ -147,23 +147,23 @@ func retrieveSig(customerRefId string) string {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
-	retrieveMpcSignRequest := RetrieveMpcSignRequest{
+	OneMPCSignTransactionsRequest := OneMPCSignTransactionsRequest{
 		CustomerRefId: customerRefId,
 	}
-	var retrieveMpcSignResponse RetrieveMpcSignResponse
+	var MPCSignTransactionsResponse MPCSignTransactionsResponse
 	for range ticker.C {
-		if err := mpcSignApi.RetrieveSig(retrieveMpcSignRequest, &retrieveMpcSignResponse); err != nil {
+		if err := mpcSignApi.OneMPCSignTransactions(OneMPCSignTransactionsRequest, &MPCSignTransactionsResponse); err != nil {
 			panic(err)
 		}
 
-		log.Infof(`mpc sign transaction status: %s, sub status: %s`, retrieveMpcSignResponse.TransactionStatus, retrieveMpcSignResponse.TransactionSubStatus)
+		log.Infof(`mpc sign transaction status: %s, sub status: %s`, MPCSignTransactionsResponse.TransactionStatus, MPCSignTransactionsResponse.TransactionSubStatus)
 
-		if retrieveMpcSignResponse.TransactionStatus == "FAILED" || retrieveMpcSignResponse.TransactionStatus == "REJECTED" {
+		if MPCSignTransactionsResponse.TransactionStatus == "FAILED" || MPCSignTransactionsResponse.TransactionStatus == "REJECTED" {
 			panic(`mpc sign transaction was FAILED or REJECTED`)
 		}
 
-		if retrieveMpcSignResponse.TransactionStatus == "COMPLETED" && retrieveMpcSignResponse.TransactionSubStatus == "CONFIRMED" {
-			return retrieveMpcSignResponse.Hashs[0].Sig
+		if MPCSignTransactionsResponse.TransactionStatus == "COMPLETED" && MPCSignTransactionsResponse.TransactionSubStatus == "CONFIRMED" {
+			return MPCSignTransactionsResponse.Hashs[0].Sig
 		}
 	}
 

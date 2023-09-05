@@ -15,7 +15,7 @@ import (
 var transactionApi TransactionApi
 
 func TestSendTransaction(t *testing.T) {
-	createTransactionRequest := CreateTransactionRequest{
+	createTransactionsRequest := CreateTransactionsRequest{
 		SourceAccountKey:       viper.GetString("accountKey"),
 		SourceAccountType:      "VAULT_ACCOUNT",
 		DestinationAccountType: "ONE_TIME_ADDRESS",
@@ -26,12 +26,12 @@ func TestSendTransaction(t *testing.T) {
 		CustomerRefId:          uuid.New().String(),
 	}
 
-	var createTransactionResponse CreateTransactionResponse
-	if err := transactionApi.SendTransaction(createTransactionRequest, &createTransactionResponse); err != nil {
+	var txKeyResult TxKeyResult
+	if err := transactionApi.CreateTransactions(createTransactionsRequest, &txKeyResult); err != nil {
 		panic(fmt.Errorf("failed to send transaction, %w", err))
 	}
 
-	log.Infof("transaction has been created, txKey: %s", createTransactionResponse.TxKey)
+	log.Infof("transaction has been created, txKey: %s", txKeyResult.TxKey)
 
 }
 
