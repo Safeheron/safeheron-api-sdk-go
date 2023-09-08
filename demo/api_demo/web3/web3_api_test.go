@@ -8,7 +8,6 @@ import (
 	"math"
 	"math/big"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 
@@ -70,7 +69,7 @@ func TestETHSign(t *testing.T) {
 	// Sign transaction with Safeheron
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSign(viper.GetString("accountKey"), customerRefId,
-		rawTransaction.ChainId().String(), []string{hash})
+		rawTransaction.ChainId().Int64(), []string{hash})
 
 	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
 	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
@@ -106,7 +105,7 @@ func TestPersonalSign(t *testing.T) {
 	// Sign transaction with Safeheron
 	customerRefId := uuid.New().String()
 	txKey := createWeb3PersonalSign(viper.GetString("accountKey"), customerRefId,
-		chainId.String(), "demo text")
+		chainId.Int64(), "demo text")
 
 	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
 	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
@@ -126,7 +125,7 @@ func TestEthSignTypedData(t *testing.T) {
 	// Sign transaction with Safeheron
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTypedData(viper.GetString("accountKey"), customerRefId,
-		chainId.String(), "{\"types\":{\"EIP712Domain\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"version\",\"type\":\"string\"},{\"name\":\"chainId\",\"type\":\"uint256\"},{\"name\":\"verifyingContract\",\"type\":\"address\"}],\"Person\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"wallet\",\"type\":\"address\"}],\"Mail\":[{\"name\":\"from\",\"type\":\"Person\"},{\"name\":\"to\",\"type\":\"Person\"},{\"name\":\"contents\",\"type\":\"string\"}]},\"primaryType\":\"Mail\",\"domain\":{\"name\":\"Ether Mail\",\"version\":\"1\",\"chainId\":1,\"verifyingContract\":\"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC\"},\"message\":{\"from\":{\"name\":\"Cow\",\"wallet\":\"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826\"},\"to\":{\"name\":\"Bob\",\"wallet\":\"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB\"},\"contents\":\"Hello, Bob!\"}}", "ETH_SIGNTYPEDDATA_V4")
+		chainId.Int64(), "{\"types\":{\"EIP712Domain\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"version\",\"type\":\"string\"},{\"name\":\"chainId\",\"type\":\"uint256\"},{\"name\":\"verifyingContract\",\"type\":\"address\"}],\"Person\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"wallet\",\"type\":\"address\"}],\"Mail\":[{\"name\":\"from\",\"type\":\"Person\"},{\"name\":\"to\",\"type\":\"Person\"},{\"name\":\"contents\",\"type\":\"string\"}]},\"primaryType\":\"Mail\",\"domain\":{\"name\":\"Ether Mail\",\"version\":\"1\",\"chainId\":1,\"verifyingContract\":\"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC\"},\"message\":{\"from\":{\"name\":\"Cow\",\"wallet\":\"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826\"},\"to\":{\"name\":\"Bob\",\"wallet\":\"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB\"},\"contents\":\"Hello, Bob!\"}}", "ETH_SIGNTYPEDDATA_V4")
 
 	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
 	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
@@ -153,9 +152,9 @@ func TestSignTransaction(t *testing.T) {
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
 		rawTransaction.To().String(), rawTransaction.Value().String(),
-		rawTransaction.ChainId().String(), "", rawTransaction.Gas(),
+		rawTransaction.ChainId().Int64(), "", int32(rawTransaction.Gas()),
 		rawTransaction.GasTipCap().String(), rawTransaction.GasFeeCap().String(),
-		rawTransaction.Nonce(), "0x"+hex.EncodeToString(rawTransaction.Data()))
+		int64(rawTransaction.Nonce()), "0x"+hex.EncodeToString(rawTransaction.Data()))
 
 	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
 	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
@@ -267,9 +266,9 @@ func TestLegacyTxSignTransaction(t *testing.T) {
 	customerRefId := uuid.New().String()
 	txKey := createWeb3EthSignTransaction(viper.GetString("accountKey"), customerRefId,
 		rawTransaction.To().String(), rawTransaction.Value().String(),
-		chainId.String(), rawTransaction.GasPrice().String(), rawTransaction.Gas(),
+		chainId.Int64(), rawTransaction.GasPrice().String(), int32(rawTransaction.Gas()),
 		"", "",
-		rawTransaction.Nonce(), string(rawTransaction.Data()))
+		int64(rawTransaction.Nonce()), string(rawTransaction.Data()))
 
 	log.Infof("Web3 sign task has been created with Safeheron API, txKey: %s, customerRefId: %s", txKey, customerRefId)
 	log.Info("You can approve the sign task with Safeheron mobile app or API Co-Signer according to your policy config")
@@ -321,30 +320,30 @@ func createLegacyTx(from string, value float64, to string, data string) *types.T
 }
 
 func createWeb3EthSignTransaction(accountKey string, customerRefId string, to string,
-	value string, chainId string, gasPrice string, gasLimit uint64, maxPriorityFeePerGas string,
-	maxFeePerGas string, nonce uint64, data string) string {
+	value string, chainId int64, gasPrice string, gasLimit int32, maxPriorityFeePerGas string,
+	maxFeePerGas string, nonce int64, data string) string {
 	ethSignTransactionRequest := api.EthSignTransactionRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Transaction: struct {
 			To                   string `json:"to"`
 			Value                string `json:"value"`
-			ChainId              string `json:"chainId"`
+			ChainId              int64  `json:"chainId"`
 			GasPrice             string `json:"gasPrice,omitempty"`
-			GasLimit             string `json:"gasLimit"`
+			GasLimit             int32  `json:"gasLimit"`
 			MaxPriorityFeePerGas string `json:"maxPriorityFeePerGas,omitempty"`
 			MaxFeePerGas         string `json:"maxFeePerGas,omitempty"`
-			Nonce                string `json:"nonce"`
+			Nonce                int64  `json:"nonce"`
 			Data                 string `json:"data,omitempty"`
 		}{
 			To:                   to,
 			Value:                value,
 			ChainId:              chainId,
-			GasLimit:             strconv.FormatUint(gasLimit, 10),
+			GasLimit:             gasLimit,
 			GasPrice:             gasPrice,
 			MaxPriorityFeePerGas: maxPriorityFeePerGas,
 			MaxFeePerGas:         maxFeePerGas,
-			Nonce:                strconv.FormatUint(nonce, 10),
+			Nonce:                nonce,
 			Data:                 data,
 		},
 	}
@@ -356,13 +355,13 @@ func createWeb3EthSignTransaction(accountKey string, customerRefId string, to st
 	return txKeyResult.TxKey
 }
 
-func createWeb3EthSign(accountKey string, customerRefId string, chainId string, hashList []string) string {
+func createWeb3EthSign(accountKey string, customerRefId string, chainId int64, hashList []string) string {
 
 	ethSignRequest := api.EthSignRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		MessageHash: struct {
-			ChainId string   `json:"chainId"`
+			ChainId int64    `json:"chainId"`
 			Hash    []string `json:"hash"`
 		}{
 			ChainId: chainId,
@@ -377,13 +376,13 @@ func createWeb3EthSign(accountKey string, customerRefId string, chainId string, 
 	return txKeyResult.TxKey
 }
 
-func createWeb3PersonalSign(accountKey string, customerRefId string, chainId string, data string) string {
+func createWeb3PersonalSign(accountKey string, customerRefId string, chainId int64, data string) string {
 
 	personalSignRequest := api.PersonalSignRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Message: struct {
-			ChainId string `json:"chainId"`
+			ChainId int64  `json:"chainId"`
 			Data    string `json:"data"`
 		}{
 			ChainId: chainId,
@@ -398,13 +397,13 @@ func createWeb3PersonalSign(accountKey string, customerRefId string, chainId str
 	return txKeyResult.TxKey
 }
 
-func createWeb3EthSignTypedData(accountKey string, customerRefId string, chainId string, data string, version string) string {
+func createWeb3EthSignTypedData(accountKey string, customerRefId string, chainId int64, data string, version string) string {
 
 	ethSignTypedDataRequest := api.EthSignTypedDataRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Message: struct {
-			ChainId string `json:"chainId"`
+			ChainId int64  `json:"chainId"`
 			Data    string `json:"data"`
 			Version string `json:"version"`
 		}{

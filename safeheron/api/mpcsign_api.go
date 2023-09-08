@@ -12,10 +12,10 @@ type CreateMpcSignRequest struct {
 	CustomerRefId    string `json:"customerRefId,omitempty"`
 	SourceAccountKey string `json:"sourceAccountKey,omitempty"`
 	SignAlg          string `json:"signAlg,omitempty"`
-	Hashs            []struct {
-		Hash string `json:"hash,omitempty"`
+	DataList         []struct {
+		Data string `json:"data,omitempty"`
 		Note string `json:"note,omitempty"`
-	} `json:"hashs,omitempty"`
+	} `json:"dataList,omitempty"`
 }
 
 type CreateMpcSignResponse struct {
@@ -35,7 +35,7 @@ type MPCSignTransactionsResponse struct {
 	TxKey                string `json:"txKey,omitempty"`
 	TransactionStatus    string `json:"transactionStatus,omitempty"`
 	TransactionSubStatus string `json:"transactionSubStatus,omitempty"`
-	CreateTime           int    `json:"createTime,omitempty"`
+	CreateTime           int64  `json:"createTime,omitempty"`
 	SourceAccountKey     string `json:"sourceAccountKey,omitempty"`
 	AuditUserKey         string `json:"auditUserKey,omitempty"`
 	CreatedByUserKey     string `json:"createdByUserKey,omitempty"`
@@ -45,11 +45,11 @@ type MPCSignTransactionsResponse struct {
 	SignAlg              string `json:"signAlg,omitempty"`
 	AuditUserName        string `json:"auditUserName,omitempty"`
 	CreatedByUserName    string `json:"createdByUserName,omitempty"`
-	Hashs                []struct {
+	DataList             []struct {
 		Data string `json:"data,omitempty"`
 		Sig  string `json:"sig,omitempty"`
 		Note string `json:"note,omitempty"`
-	} `json:"hashs,omitempty"`
+	} `json:"dataList,omitempty"`
 }
 
 func (e *MpcSignApi) OneMPCSignTransactions(d OneMPCSignTransactionsRequest, r *MPCSignTransactionsResponse) error {

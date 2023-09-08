@@ -122,7 +122,7 @@ func (e *AccountApi) BatchCreateAccountCoin(d BatchCreateAccountCoinRequest, r *
 }
 
 type ListAccountCoinRequest struct {
-	AccountKey []string `json:"accountKey"`
+	AccountKey string `json:"accountKey"`
 }
 
 type AccountCoinResponse []struct {

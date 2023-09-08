@@ -70,7 +70,7 @@ type EthSignRequest struct {
 	CustomerExt1  string `json:"customerExt1,omitempty"`
 	CustomerExt2  string `json:"customerExt2,omitempty"`
 	MessageHash   struct {
-		ChainId string   `json:"chainId"`
+		ChainId int64    `json:"chainId"`
 		Hash    []string `json:"hash"`
 	} `json:"messageHash"`
 }
@@ -86,7 +86,7 @@ type PersonalSignRequest struct {
 	CustomerExt1  string `json:"customerExt1,omitempty"`
 	CustomerExt2  string `json:"customerExt2,omitempty"`
 	Message       struct {
-		ChainId string `json:"chainId"`
+		ChainId int64  `json:"chainId"`
 		Data    string `json:"data"`
 	} `json:"message"`
 }
@@ -102,7 +102,7 @@ type EthSignTypedDataRequest struct {
 	CustomerExt1  string `json:"customerExt1,omitempty"`
 	CustomerExt2  string `json:"customerExt2,omitempty"`
 	Message       struct {
-		ChainId string `json:"chainId"`
+		ChainId int64  `json:"chainId"`
 		Data    string `json:"data"`
 		Version string `json:"version"`
 	} `json:"message"`
@@ -121,12 +121,12 @@ type EthSignTransactionRequest struct {
 	Transaction   struct {
 		To                   string `json:"to"`
 		Value                string `json:"value"`
-		ChainId              string `json:"chainId"`
+		ChainId              int64  `json:"chainId"`
 		GasPrice             string `json:"gasPrice,omitempty"`
-		GasLimit             string `json:"gasLimit"`
+		GasLimit             int32  `json:"gasLimit"`
 		MaxPriorityFeePerGas string `json:"maxPriorityFeePerGas,omitempty"`
 		MaxFeePerGas         string `json:"maxFeePerGas,omitempty"`
-		Nonce                string `json:"nonce"`
+		Nonce                int64  `json:"nonce"`
 		Data                 string `json:"data,omitempty"`
 	} `json:"transaction"`
 }
@@ -173,7 +173,7 @@ type Web3SignQueryResponse struct {
 		Value                string `json:"value,omitempty"`
 		ChainId              int64  `json:"chainId,omitempty"`
 		GasPrice             string `json:"gasPrice,omitempty"`
-		GasLimit             int64  `json:"gasLimit,omitempty"`
+		GasLimit             int32  `json:"gasLimit,omitempty"`
 		MaxPriorityFeePerGas string `json:"maxPriorityFeePerGas,omitempty"`
 		MaxFeePerGas         string `json:"maxFeePerGas,omitempty"`
 		Nonce                int64  `json:"nonce,omitempty"`

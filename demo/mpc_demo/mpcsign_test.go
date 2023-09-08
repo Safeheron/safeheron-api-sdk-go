@@ -124,15 +124,15 @@ func createTransaction(fromAddress common.Address, value float64, to string, dat
 	return tx
 }
 
-func requestMpcSig(customerRefId string, accountKey string, hash string) string {
+func requestMpcSig(customerRefId string, accountKey string, dataList string) string {
 	createMpcSignRequest := api.CreateMpcSignRequest{
 		CustomerRefId:    customerRefId,
 		SourceAccountKey: accountKey,
 		SignAlg:          "Secp256k1",
-		Hashs: []struct {
-			Hash string `json:"hash,omitempty"`
+		DataList: []struct {
+			Data string `json:"data,omitempty"`
 			Note string `json:"note,omitempty"`
-		}{{Hash: hash[2:]}},
+		}{{Data: dataList[2:]}},
 	}
 
 	var createMpcSignResponse api.CreateMpcSignResponse
@@ -164,7 +164,7 @@ func retrieveSig(customerRefId string) string {
 		}
 
 		if MPCSignTransactionsResponse.TransactionStatus == "COMPLETED" && MPCSignTransactionsResponse.TransactionSubStatus == "CONFIRMED" {
-			return MPCSignTransactionsResponse.Hashs[0].Sig
+			return MPCSignTransactionsResponse.DataList[0].Sig
 		}
 	}
 
