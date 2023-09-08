@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
+	"github.com/Safeheron/safeheron-api-sdk-go/safeheron/api"
 	"github.com/spf13/viper"
 
 	"github.com/stretchr/testify/assert"
@@ -13,15 +14,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var accountApi AccountApi
+var accountApi api.AccountApi
 
 func TestListAccounts(t *testing.T) {
-	req := ListAccountRequest{
+	req := api.ListAccountRequest{
 		PageNumber: 1,
 		PageSize:   10,
 	}
 
-	var res ListAccountResponse
+	var res api.ListAccountResponse
 	err := accountApi.ListAccounts(req, &res)
 	assert.Nil(t, err)
 	assert.Greater(t, len(res.Content), 0)
@@ -33,24 +34,24 @@ func TestListAccounts(t *testing.T) {
 }
 
 func TestCreateAccountAndAddCoin(t *testing.T) {
-	createAccountRequest := CreateAccountRequest{
+	createAccountRequest := api.CreateAccountRequest{
 		AccountName: "first-wallet-account",
 		HiddenOnUI:  true,
 	}
 
-	var createAccountResponse CreateAccountResponse
+	var createAccountResponse api.CreateAccountResponse
 	if err := accountApi.CreateAccount(createAccountRequest, &createAccountResponse); err != nil {
 		panic(fmt.Errorf("failed to create wallet account, %w", err))
 	}
 
 	log.Infof("wallet account created, account key: %s", createAccountResponse.AccountKey)
 
-	addCoinRequest := AddCoinRequest{
+	addCoinRequest := api.AddCoinRequest{
 		AccountKey: createAccountResponse.AccountKey,
 		CoinKey:    "ETH_GOERLI",
 	}
 
-	var addCoinResponse AddCoinResponse
+	var addCoinResponse api.AddCoinResponse
 
 	if err := accountApi.AddCoin(addCoinRequest, &addCoinResponse); err != nil {
 		panic(fmt.Errorf("failed to add coin in wallet, %w", err))
@@ -74,7 +75,7 @@ func setup() {
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
 	}}
 
-	accountApi = AccountApi{Client: sc}
+	accountApi = api.AccountApi{Client: sc}
 }
 
 func teardown() {

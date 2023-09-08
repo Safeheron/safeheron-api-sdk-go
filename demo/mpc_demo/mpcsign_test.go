@@ -12,6 +12,7 @@ import (
 
 	ethUnit "github.com/DeOne4eg/eth-unit-converter"
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
+	"github.com/Safeheron/safeheron-api-sdk-go/safeheron/api"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -24,7 +25,7 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
-var mpcSignApi MpcSignApi
+var mpcSignApi api.MpcSignApi
 
 const READ_ONLY_FROM_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -123,18 +124,18 @@ func createTransaction(fromAddress common.Address, value float64, to string, dat
 	return tx
 }
 
-func requestMpcSig(customerRefId string, accountKey string, hash string) string {
-	createMpcSignRequest := CreateMpcSignRequest{
+func requestMpcSig(customerRefId string, accountKey string, dataList string) string {
+	createMpcSignRequest := api.CreateMpcSignRequest{
 		CustomerRefId:    customerRefId,
 		SourceAccountKey: accountKey,
 		SignAlg:          "Secp256k1",
-		Hashs: []struct {
-			Hash string `json:"hash,omitempty"`
+		DataList: []struct {
+			Data string `json:"data,omitempty"`
 			Note string `json:"note,omitempty"`
-		}{{Hash: hash[2:]}},
+		}{{Data: dataList[2:]}},
 	}
 
-	var createMpcSignResponse CreateMpcSignResponse
+	var createMpcSignResponse api.CreateMpcSignResponse
 	if err := mpcSignApi.CreateMpcSign(createMpcSignRequest, &createMpcSignResponse); err != nil {
 		panic(err)
 	}
@@ -147,23 +148,23 @@ func retrieveSig(customerRefId string) string {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
-	retrieveMpcSignRequest := RetrieveMpcSignRequest{
+	OneMPCSignTransactionsRequest := api.OneMPCSignTransactionsRequest{
 		CustomerRefId: customerRefId,
 	}
-	var retrieveMpcSignResponse RetrieveMpcSignResponse
+	var MPCSignTransactionsResponse api.MPCSignTransactionsResponse
 	for range ticker.C {
-		if err := mpcSignApi.RetrieveSig(retrieveMpcSignRequest, &retrieveMpcSignResponse); err != nil {
+		if err := mpcSignApi.OneMPCSignTransactions(OneMPCSignTransactionsRequest, &MPCSignTransactionsResponse); err != nil {
 			panic(err)
 		}
 
-		log.Infof(`mpc sign transaction status: %s, sub status: %s`, retrieveMpcSignResponse.TransactionStatus, retrieveMpcSignResponse.TransactionSubStatus)
+		log.Infof(`mpc sign transaction status: %s, sub status: %s`, MPCSignTransactionsResponse.TransactionStatus, MPCSignTransactionsResponse.TransactionSubStatus)
 
-		if retrieveMpcSignResponse.TransactionStatus == "FAILED" || retrieveMpcSignResponse.TransactionStatus == "REJECTED" {
+		if MPCSignTransactionsResponse.TransactionStatus == "FAILED" || MPCSignTransactionsResponse.TransactionStatus == "REJECTED" {
 			panic(`mpc sign transaction was FAILED or REJECTED`)
 		}
 
-		if retrieveMpcSignResponse.TransactionStatus == "COMPLETED" && retrieveMpcSignResponse.TransactionSubStatus == "CONFIRMED" {
-			return retrieveMpcSignResponse.Hashs[0].Sig
+		if MPCSignTransactionsResponse.TransactionStatus == "COMPLETED" && MPCSignTransactionsResponse.TransactionSubStatus == "CONFIRMED" {
+			return MPCSignTransactionsResponse.DataList[0].Sig
 		}
 	}
 
@@ -204,7 +205,7 @@ func setup() {
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
 	}}
 
-	mpcSignApi = MpcSignApi{Client: sc}
+	mpcSignApi = api.MpcSignApi{Client: sc}
 
 	client, _ = ethclient.Dial(viper.GetString("ethereumRpcApi"))
 	chainId, _ := client.NetworkID(context.Background())

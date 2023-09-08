@@ -33,8 +33,7 @@ type SafeheronResponse struct {
 }
 
 func (c Client) SendRequest(request any, response any, path string) error {
-	payLoad, _ := json.Marshal(request)
-	respContent, err := c.execute(string(payLoad), path)
+	respContent, err := c.execute(request, path)
 	if err != nil {
 		return err
 	}
@@ -42,16 +41,26 @@ func (c Client) SendRequest(request any, response any, path string) error {
 	return err
 }
 
-func (c Client) execute(data string, endpoint string) ([]byte, error) {
-	log.Infof("send request data: %s", data)
+func (c Client) execute(request any, endpoint string) ([]byte, error) {
 	// Use AES to encrypt request data
 	aesKey := make([]byte, 32)
 	rand.Read(aesKey)
 	aesIv := make([]byte, 16)
 	rand.Read(aesIv)
-	encryptBizContent, err := utils.EncryContentWithAES(data, aesKey, aesIv)
-	if err != nil {
-		return nil, err
+	// Create params map
+	params := map[string]string{
+		"apiKey":    c.Config.ApiKey,
+		"timestamp": strconv.FormatInt(time.Now().UnixMicro(), 10),
+	}
+	if request != nil {
+		payLoad, _ := json.Marshal(request)
+		data := string(payLoad)
+		log.Infof("send request data: %s", data)
+		encryptBizContent, err := utils.EncryContentWithAES(data, aesKey, aesIv)
+		if err != nil {
+			return nil, err
+		}
+		params["bizContent"] = encryptBizContent
 	}
 
 	// Use Safeheron RSA public key to encrypt request's aesKey and aesIv
@@ -59,14 +68,7 @@ func (c Client) execute(data string, endpoint string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Create params map
-	params := map[string]string{
-		"apiKey":     c.Config.ApiKey,
-		"timestamp":  strconv.FormatInt(time.Now().UnixMicro(), 10),
-		"key":        encryptedKeyAndIv,
-		"bizContent": encryptBizContent,
-	}
+	params["key"] = encryptedKeyAndIv
 
 	// Sign the request data with your RSA private key
 	signature, err := utils.SignParamsWithRSA(serializeParams(params), c.Config.RsaPrivateKey)
