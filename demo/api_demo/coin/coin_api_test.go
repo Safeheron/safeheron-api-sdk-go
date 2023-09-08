@@ -6,15 +6,16 @@ import (
 	"testing"
 
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
+	"github.com/Safeheron/safeheron-api-sdk-go/safeheron/api"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
-var coinApi CoinApi
+var coinApi api.CoinApi
 
 func TestDemo(t *testing.T) {
 
-	var res CoinResponse
+	var res api.CoinResponse
 	if err := coinApi.ListCoin(&res); err != nil {
 		panic(fmt.Errorf("failed to create wallet account, %w", err))
 	}
@@ -41,7 +42,7 @@ func setup() {
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
 	}}
 
-	coinApi = CoinApi{Client: sc}
+	coinApi = api.CoinApi{Client: sc}
 }
 
 func teardown() {

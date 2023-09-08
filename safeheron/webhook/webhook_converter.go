@@ -1,4 +1,4 @@
-package webhook_demo
+package webhook
 
 import (
 	"encoding/base64"
@@ -23,6 +23,11 @@ type WebHook struct {
 	Sig        string `json:"sig"`
 	Key        string `json:"key"`
 	BizContent string `json:"bizContent"`
+}
+
+type WebHookResponse struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
 func (c *WebhookConverter) Convert(d WebHook) (string, error) {

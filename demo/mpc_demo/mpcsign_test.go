@@ -12,6 +12,7 @@ import (
 
 	ethUnit "github.com/DeOne4eg/eth-unit-converter"
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
+	"github.com/Safeheron/safeheron-api-sdk-go/safeheron/api"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -24,7 +25,7 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
-var mpcSignApi MpcSignApi
+var mpcSignApi api.MpcSignApi
 
 const READ_ONLY_FROM_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -124,7 +125,7 @@ func createTransaction(fromAddress common.Address, value float64, to string, dat
 }
 
 func requestMpcSig(customerRefId string, accountKey string, hash string) string {
-	createMpcSignRequest := CreateMpcSignRequest{
+	createMpcSignRequest := api.CreateMpcSignRequest{
 		CustomerRefId:    customerRefId,
 		SourceAccountKey: accountKey,
 		SignAlg:          "Secp256k1",
@@ -134,7 +135,7 @@ func requestMpcSig(customerRefId string, accountKey string, hash string) string 
 		}{{Hash: hash[2:]}},
 	}
 
-	var createMpcSignResponse CreateMpcSignResponse
+	var createMpcSignResponse api.CreateMpcSignResponse
 	if err := mpcSignApi.CreateMpcSign(createMpcSignRequest, &createMpcSignResponse); err != nil {
 		panic(err)
 	}
@@ -147,10 +148,10 @@ func retrieveSig(customerRefId string) string {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
-	OneMPCSignTransactionsRequest := OneMPCSignTransactionsRequest{
+	OneMPCSignTransactionsRequest := api.OneMPCSignTransactionsRequest{
 		CustomerRefId: customerRefId,
 	}
-	var MPCSignTransactionsResponse MPCSignTransactionsResponse
+	var MPCSignTransactionsResponse api.MPCSignTransactionsResponse
 	for range ticker.C {
 		if err := mpcSignApi.OneMPCSignTransactions(OneMPCSignTransactionsRequest, &MPCSignTransactionsResponse); err != nil {
 			panic(err)
@@ -204,7 +205,7 @@ func setup() {
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
 	}}
 
-	mpcSignApi = MpcSignApi{Client: sc}
+	mpcSignApi = api.MpcSignApi{Client: sc}
 
 	client, _ = ethclient.Dial(viper.GetString("ethereumRpcApi"))
 	chainId, _ := client.NetworkID(context.Background())

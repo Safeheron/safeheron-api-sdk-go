@@ -1,4 +1,4 @@
-package account_api_demo
+package api
 
 import (
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"

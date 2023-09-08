@@ -1,4 +1,4 @@
-package mpc_demo
+package api
 
 import (
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"

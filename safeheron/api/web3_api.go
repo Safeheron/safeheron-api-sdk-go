@@ -1,4 +1,4 @@
-package web3_demo
+package api
 
 import (
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
@@ -75,10 +75,6 @@ type EthSignRequest struct {
 	} `json:"messageHash"`
 }
 
-type TxKeyResult struct {
-	TxKey string `json:"txKey"`
-}
-
 func (e *Web3Api) EthSign(d EthSignRequest, r *TxKeyResult) error {
 	return e.Client.SendRequest(d, r, "/v1/web3/sign/ethSign")
 }
@@ -141,10 +137,6 @@ func (e *Web3Api) EthSignTransaction(d EthSignTransactionRequest, r *TxKeyResult
 
 type CancelWeb3SignRequest struct {
 	TxKey string `json:"txKey"`
-}
-
-type ResultResponse struct {
-	Result bool `json:"result"`
 }
 
 func (e *Web3Api) CancelWeb3Sign(d CancelWeb3SignRequest, r *ResultResponse) error {

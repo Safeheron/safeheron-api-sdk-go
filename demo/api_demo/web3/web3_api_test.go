@@ -14,6 +14,7 @@ import (
 
 	ethUnit "github.com/DeOne4eg/eth-unit-converter"
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
+	"github.com/Safeheron/safeheron-api-sdk-go/safeheron/api"
 	ethereum "github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -31,15 +32,15 @@ var client *ethclient.Client
 var tokenInstance *Token
 var signer types.Signer
 
-var web3Api Web3Api
+var web3Api api.Web3Api
 
 func TestCreateWeb3Account(t *testing.T) {
-	createWeb3AccountRequest := CreateWeb3AccountRequest{
+	createWeb3AccountRequest := api.CreateWeb3AccountRequest{
 		AccountName: "first-web3-wallet3",
 		HiddenOnUI:  false,
 	}
 
-	var createAccountResponse CreateWeb3AccountResponse
+	var createAccountResponse api.CreateWeb3AccountResponse
 
 	if err := web3Api.CreateWeb3Account(createWeb3AccountRequest, &createAccountResponse); err != nil {
 		panic(fmt.Errorf("failed to create web3 wallet account, %w", err))
@@ -322,7 +323,7 @@ func createLegacyTx(from string, value float64, to string, data string) *types.T
 func createWeb3EthSignTransaction(accountKey string, customerRefId string, to string,
 	value string, chainId string, gasPrice string, gasLimit uint64, maxPriorityFeePerGas string,
 	maxFeePerGas string, nonce uint64, data string) string {
-	ethSignTransactionRequest := EthSignTransactionRequest{
+	ethSignTransactionRequest := api.EthSignTransactionRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Transaction: struct {
@@ -347,7 +348,7 @@ func createWeb3EthSignTransaction(accountKey string, customerRefId string, to st
 			Data:                 data,
 		},
 	}
-	var txKeyResult TxKeyResult
+	var txKeyResult api.TxKeyResult
 	if err := web3Api.EthSignTransaction(ethSignTransactionRequest, &txKeyResult); err != nil {
 		panic(fmt.Errorf("failed to send create web3 eth_signTransaction, %w", err))
 	}
@@ -357,7 +358,7 @@ func createWeb3EthSignTransaction(accountKey string, customerRefId string, to st
 
 func createWeb3EthSign(accountKey string, customerRefId string, chainId string, hashList []string) string {
 
-	ethSignRequest := EthSignRequest{
+	ethSignRequest := api.EthSignRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		MessageHash: struct {
@@ -368,7 +369,7 @@ func createWeb3EthSign(accountKey string, customerRefId string, chainId string, 
 			Hash:    hashList,
 		},
 	}
-	var txKeyResult TxKeyResult
+	var txKeyResult api.TxKeyResult
 	if err := web3Api.EthSign(ethSignRequest, &txKeyResult); err != nil {
 		panic(fmt.Errorf("failed to send create web3 eth_sign, %w", err))
 	}
@@ -378,7 +379,7 @@ func createWeb3EthSign(accountKey string, customerRefId string, chainId string, 
 
 func createWeb3PersonalSign(accountKey string, customerRefId string, chainId string, data string) string {
 
-	personalSignRequest := PersonalSignRequest{
+	personalSignRequest := api.PersonalSignRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Message: struct {
@@ -389,7 +390,7 @@ func createWeb3PersonalSign(accountKey string, customerRefId string, chainId str
 			Data:    data,
 		},
 	}
-	var txKeyResult TxKeyResult
+	var txKeyResult api.TxKeyResult
 	if err := web3Api.PersonalSign(personalSignRequest, &txKeyResult); err != nil {
 		panic(fmt.Errorf("failed to send create web3 personal_sign, %w", err))
 	}
@@ -399,7 +400,7 @@ func createWeb3PersonalSign(accountKey string, customerRefId string, chainId str
 
 func createWeb3EthSignTypedData(accountKey string, customerRefId string, chainId string, data string, version string) string {
 
-	ethSignTypedDataRequest := EthSignTypedDataRequest{
+	ethSignTypedDataRequest := api.EthSignTypedDataRequest{
 		AccountKey:    accountKey,
 		CustomerRefId: customerRefId,
 		Message: struct {
@@ -412,7 +413,7 @@ func createWeb3EthSignTypedData(accountKey string, customerRefId string, chainId
 			Version: version,
 		},
 	}
-	var txKeyResult TxKeyResult
+	var txKeyResult api.TxKeyResult
 	if err := web3Api.EthSignTypedData(ethSignTypedDataRequest, &txKeyResult); err != nil {
 		panic(fmt.Errorf("failed to send create web3 eth_signTypedData, %w", err))
 	}
@@ -420,15 +421,15 @@ func createWeb3EthSignTypedData(accountKey string, customerRefId string, chainId
 	return txKeyResult.TxKey
 }
 
-func queryWeb3Sig(customerRefId string) Web3SignQueryResponse {
+func queryWeb3Sig(customerRefId string) api.Web3SignQueryResponse {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
-	web3SignQueryRequest := Web3SignQueryRequest{
+	web3SignQueryRequest := api.Web3SignQueryRequest{
 		CustomerRefId: customerRefId,
 	}
 
-	var web3SignQueryResponse Web3SignQueryResponse
+	var web3SignQueryResponse api.Web3SignQueryResponse
 
 	for range ticker.C {
 		if err := web3Api.QueryWeb3Sig(web3SignQueryRequest, &web3SignQueryResponse); err != nil {
@@ -486,7 +487,7 @@ func setup() {
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
 	}}
 
-	web3Api = Web3Api{Client: sc}
+	web3Api = api.Web3Api{Client: sc}
 	client, _ = ethclient.Dial(viper.GetString("ethereumRpcApi"))
 	chainId, _ := client.NetworkID(context.Background())
 	signer = types.NewLondonSigner(chainId)

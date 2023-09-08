@@ -1,4 +1,4 @@
-package transaction_api_demo
+package api
 
 import (
 	"github.com/Safeheron/safeheron-api-sdk-go/safeheron"
@@ -249,10 +249,6 @@ func (e *TransactionApi) TransactionFeeRate(d TransactionsFeeRateRequest, r *Tra
 type CancelTransactionRequest struct {
 	TxKey  string `json:"txKey"`
 	TxType string `json:"txType,omitempty"`
-}
-
-type ResultResponse struct {
-	Result bool `json:"result"`
 }
 
 func (e *TransactionApi) CancelTransactions(d CancelTransactionRequest, r *ResultResponse) error {
