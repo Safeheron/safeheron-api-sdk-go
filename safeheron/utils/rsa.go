@@ -27,7 +27,10 @@ func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
 }
 
 func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
-	privateKey, _ := loadPrivateKeyFromPath(privateKeyPath)
+	privateKey, err := loadPrivateKeyFromPath(privateKeyPath)
+	if err != nil {
+		return nil, err
+	}
 
 	data, _ := base64.StdEncoding.DecodeString(base64Data)
 	plaintext, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, data)
@@ -39,7 +42,10 @@ func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
 }
 
 func EncryptWithRSA(data []byte, publicKeyPath string) (string, error) {
-	pubKey, _ := loadPublicKeyFromPath(publicKeyPath)
+	pubKey, err := loadPublicKeyFromPath(publicKeyPath)
+	if err != nil {
+		return "", err
+	}
 	signPKCS1v15, err := rsa.EncryptPKCS1v15(rand.Reader, pubKey, data)
 	if err != nil {
 		return "", err
