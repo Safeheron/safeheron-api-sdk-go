@@ -25,6 +25,7 @@ type ListAccountResponse struct {
 		AccountName       string `json:"accountName"`
 		AccountIndex      int32  `json:"accountIndex"`
 		AccountType       string `json:"accountType"`
+		AccountTag        string `json:"accountTag"`
 		HiddenOnUI        bool   `json:"hiddenOnUI"`
 		UsdBalance        string `json:"usdBalance"`
 		FrozenUsdBalance  string `json:"frozenUsdBalance"`
@@ -43,6 +44,7 @@ func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) 
 type CreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
 	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
+	AccountTag  string `json:"accountTag,omitempty"`
 }
 
 type CreateAccountResponse struct {
@@ -60,6 +62,7 @@ func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountRespo
 type BatchCreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
 	Count       int32  `json:"count"`
+	AccountTag  string `json:"accountTag,omitempty"`
 }
 
 type BatchCreateAccountResponse struct {
@@ -85,6 +88,15 @@ type ResultResponse struct {
 
 func (e *AccountApi) UpdateAccountShowState(d UpdateAccountShowStateRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/account/update/show/state")
+}
+
+type BatchUpdateAccountTagRequest struct {
+	AccountKey string `json:"accountKey"`
+	AccountTag string `json:"accountTag"`
+}
+
+func (e *AccountApi) batchUpdateAccountTag(d BatchUpdateAccountTagRequest, r *ResultResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/batch/update/tag")
 }
 
 type AddCoinRequest struct {
