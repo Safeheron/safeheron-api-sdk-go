@@ -20,6 +20,7 @@ type TransactionsRequest struct {
 	DestinationAccountType     string `json:"destinationAccountType"`
 	DestinationAddress         string `json:"destinationAddress"`
 	DestinationTag             string `json:"destinationTag"`
+	TransactionType            string `json:"transactionType"`
 	TransactionStatus          string `json:"transactionStatus"`
 	TransactionSubStatus       string `json:"transactionSubStatus"`
 	CreateTime                 int64  `json:"createTime"`
@@ -183,6 +184,7 @@ type OneTransactionsResponse struct {
 	DestinationAccountType     string                `json:"destinationAccountType"`
 	DestinationAddress         string                `json:"destinationAddress"`
 	DestinationTag             string                `json:"destinationTag"`
+	TransactionType            string                `json:"transactionType"`
 	TransactionStatus          string                `json:"transactionStatus"`
 	TransactionSubStatus       string                `json:"transactionSubStatus"`
 	CreateTime                 int64                 `json:"createTime"`
