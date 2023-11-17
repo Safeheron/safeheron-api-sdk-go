@@ -33,6 +33,7 @@ type TransactionsRequest struct {
 	CustomerRefId              string `json:"customerRefId"`
 	CustomerExt1               string `json:"customerExt1"`
 	CustomerExt2               string `json:"customerExt2"`
+	AmlLock                    string `json:"amlLock"`
 	BlockHeight                int64  `json:"blockHeight"`
 	CompletedTime              int64  `json:"completedTime"`
 	RealDestinationAccountType string `json:"realDestinationAccountType"`
@@ -197,6 +198,7 @@ type OneTransactionsResponse struct {
 	CustomerRefId              string                `json:"customerRefId"`
 	CustomerExt1               string                `json:"customerExt1"`
 	CustomerExt2               string                `json:"customerExt2"`
+	AmlLock                    string                `json:"amlLock"`
 	BlockHeight                int64                 `json:"blockHeight"`
 	CompletedTime              int64                 `json:"completedTime"`
 	RealDestinationAccountType string                `json:"realDestinationAccountType"`

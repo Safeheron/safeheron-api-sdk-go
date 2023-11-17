@@ -21,16 +21,14 @@ type ListAccountResponse struct {
 	PageSize      int32 `json:"pageSize"`
 	TotalElements int64 `json:"totalElements"`
 	Content       []struct {
-		AccountKey        string `json:"accountKey"`
-		AccountName       string `json:"accountName"`
-		AccountIndex      int32  `json:"accountIndex"`
-		AccountType       string `json:"accountType"`
-		AccountTag        string `json:"accountTag"`
-		HiddenOnUI        bool   `json:"hiddenOnUI"`
-		UsdBalance        string `json:"usdBalance"`
-		FrozenUsdBalance  string `json:"frozenUsdBalance"`
-		AmlLockUsdBalance string `json:"amlLockUsdBalance"`
-		PubKeys           []struct {
+		AccountKey   string `json:"accountKey"`
+		AccountName  string `json:"accountName"`
+		AccountIndex int32  `json:"accountIndex"`
+		AccountType  string `json:"accountType"`
+		AccountTag   string `json:"accountTag"`
+		HiddenOnUI   bool   `json:"hiddenOnUI"`
+		UsdBalance   string `json:"usdBalance"`
+		PubKeys      []struct {
 			SignAlg string `json:"signAlg"`
 			PubKey  string `json:"pubKey"`
 		} `json:"pubKeys"`
@@ -42,9 +40,10 @@ func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) 
 }
 
 type CreateAccountRequest struct {
-	AccountName string `json:"accountName,omitempty"`
-	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
-	AccountTag  string `json:"accountTag,omitempty"`
+	AccountName string   `json:"accountName,omitempty"`
+	HiddenOnUI  bool     `json:"hiddenOnUI,omitempty"`
+	AccountTag  string   `json:"accountTag,omitempty"`
+	CoinKeyList []string `json:"coinKeyList,omitempty"`
 }
 
 type CreateAccountResponse struct {
@@ -53,6 +52,13 @@ type CreateAccountResponse struct {
 		SignAlg string `json:"signAlg"`
 		PubKey  string `json:"pubKey"`
 	} `json:"pubKeys"`
+	CoinAddressList []struct {
+		CoinKey     string `json:"coinKey"`
+		AddressList []struct {
+			Address     string `json:"address"`
+			AddressType string `json:"addressType"`
+		} `json:"addressList"`
+	} `json:"coinAddressList"`
 }
 
 func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountResponse) error {
@@ -107,7 +113,6 @@ type AddCoinRequest struct {
 type AddCoinResponse []struct {
 	Address     string `json:"address"`
 	AddressType string `json:"addressType"`
-	AmlLock     string `json:"amlLock"`
 }
 
 func (e *AccountApi) AddCoin(d AddCoinRequest, r *AddCoinResponse) error {
@@ -125,7 +130,6 @@ type BatchCreateAccountCoinResponse []struct {
 	AddressList []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
-		AmlLock     string `json:"amlLock"`
 	} `json:"addressList"`
 }
 
@@ -157,7 +161,6 @@ type AccountCoinResponse []struct {
 		Address        string `json:"address"`
 		AddressType    string `json:"addressType"`
 		AddressBalance string `json:"addressBalance"`
-		AmlLock        string `json:"amlLock"`
 	} `json:"addressList"`
 }
 
@@ -183,7 +186,6 @@ type AccountCoinAddressResponse struct {
 			Address        string `json:"address"`
 			AddressType    string `json:"addressType"`
 			AddressBalance string `json:"addressBalance"`
-			AmlLock        string `json:"amlLock"`
 		} `json:"addressList"`
 	} `json:"content"`
 }
@@ -202,7 +204,6 @@ type InfoAccountCoinAddressResponse struct {
 	AddressType    string `json:"addressType"`
 	AddressBalance string `json:"addressBalance"`
 	AccountKey     string `json:"accountKey"`
-	AmlLock        string `json:"amlLock"`
 }
 
 func (e *AccountApi) InfoAccountCoinAddress(d InfoAccountCoinAddressRequest, r *InfoAccountCoinAddressResponse) error {
@@ -227,7 +228,6 @@ type CreateAccountCoinAddressRequest struct {
 type CreateAccountCoinAddressResponse struct {
 	Address     string `json:"address"`
 	AddressType string `json:"addressType"`
-	AmlLock     string `json:"amlLock"`
 }
 
 func (e *AccountApi) CreateAccountCoinAddress(d CreateAccountCoinAddressRequest, r *CreateAccountCoinAddressResponse) error {
@@ -246,7 +246,6 @@ type BatchCreateAccountCoinUTXOResponse []struct {
 	AddressList []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
-		AmlLock     string `json:"amlLock"`
 	} `json:"addressList"`
 }
 
