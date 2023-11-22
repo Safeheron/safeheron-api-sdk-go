@@ -31,39 +31,6 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
 
 > Take [`/v1/account/create`](https://docs.safeheron.com/api/index.html) as an example to explain, the complete code can be found in `demo/api_demo` directory
 
-* Define request parameter data object
-    ```go
-    type CreateAccountRequest struct {
-        AccountName string `json:"accountName,omitempty"`
-        HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
-    }
-    ```
-
-* Define response data object
-    ```go
-    type CreateAccountResponse struct {
-        AccountKey string `json:"accountKey"`
-        PubKeys    []struct {
-            SignAlg string `json:"signAlg"`
-            PubKey  string `json:"pubKey"`
-        } `json:"pubKeys"`
-    }
-    ```
-
-* Define the interface to use
-    ```go
-    type AccountApi struct {
-        Client safeheron.Client
-    }
-
-    const createpath = "/v1/account/create"
-
-    func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountResponse) error {
-        return e.Client.SendRequest(d, r, createpath)
-    }
-
-    // Other interfaces
-    ```
 * Construct `safeheron.ApiConfig` 
     ```go
     // You can get `ApiKey` and `SafeheronRsaPublicKey` from Safeheron Web Console: https://www.safeheron.com/console.
@@ -76,16 +43,18 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     ```
 * Call `CreateAccount` api with `sc`
     ```go
-    accountApi = AccountApi{Client: sc}
 
-    req := CreateAccountRequest{
-            HiddenOnUI: true,
-    }
+    accountApi := api.AccountApi{Client: sc}
 
-    var res CreateAccountResponse
+    req := api.CreateAccountRequest{
+		AccountName: "first-wallet-account",
+		HiddenOnUI:  true,
+	}
+
+    var res api.CreateAccountResponse
     err := accountApi.CreateAccount(req, &res)
     if err != nil {
-
+        // Your code to process err
     }
 
     // Your code to process response
@@ -103,6 +72,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     # path to your private key file, pem encoded
     privateKeyPemFile: /path/to/your/privatekey.pem
     # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    # You can convert the Safeheron API Public Key obtained from Safeheron Web Console to PEM format with openssl: 
+    # echo MIICIjANBgkqhk*****UbNkcCAwEAAQ== | base64 -d | openssl rsa -pubin -inform DER -outform PEM -out /path/to/safeheron/api/publickey.pem
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip
@@ -122,6 +93,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     # path to your private key file, pem encoded
     privateKeyPemFile: /path/to/your/privatekey.pem
     # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    # You can convert the Safeheron API Public Key obtained from Safeheron Web Console to PEM format with openssl: 
+    # echo MIICIjANBgkqhk*****UbNkcCAwEAAQ== | base64 -d | openssl rsa -pubin -inform DER -outform PEM -out /path/to/safeheron/api/publickey.pem
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip
@@ -145,6 +118,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     # path to your private key file, pem encoded
     privateKeyPemFile: /path/to/your/privatekey.pem
     # path to Safeheron API public key file, pem encoded, you can get it from Safeheron Web Console: https://www.safeheron.com/console.
+    # You can convert the Safeheron API Public Key obtained from Safeheron Web Console to PEM format with openssl: 
+    # echo MIICIjANBgkqhk*****UbNkcCAwEAAQ== | base64 -d | openssl rsa -pubin -inform DER -outform PEM -out /path/to/safeheron/api/publickey.pem
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip

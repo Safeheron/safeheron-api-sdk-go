@@ -8,7 +8,8 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
-	"io/ioutil"
+	"fmt"
+	"os"
 )
 
 func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
@@ -20,6 +21,9 @@ func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
 
 	hashed := sha256.Sum256([]byte(data))
 	signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hashed[:])
+	if err != nil {
+		return "", err
+	}
 
 	// Encode to base64 format
 	b64sig := base64.StdEncoding.EncodeToString(signature)
@@ -32,7 +36,11 @@ func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
 		return nil, err
 	}
 
-	data, _ := base64.StdEncoding.DecodeString(base64Data)
+	data, err := base64.StdEncoding.DecodeString(base64Data)
+	if err != nil {
+		return nil, err
+	}
+
 	plaintext, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, data)
 	if err != nil {
 		return nil, err
@@ -73,11 +81,14 @@ func VerifySignWithRSA(data string, base64Sign string, rasPublicKeyPath string) 
 
 func loadPublicKeyFromPath(path string) (*rsa.PublicKey, error) {
 	var err error
-	readFile, err := ioutil.ReadFile(path)
+	readFile, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 	pemBlock, _ := pem.Decode(readFile)
+	if pemBlock == nil {
+		return nil, fmt.Errorf("Could not read public key from[%s]. Please make sure the file in pem format, with headers and footers.(e.g. '-----BEGIN PUBLIC KEY-----' and '-----END PUBLIC KEY-----')", path)
+	}
 	var pkixPublicKey interface{}
 	if pemBlock.Type == "RSA PUBLIC KEY" {
 		// -----BEGIN RSA PUBLIC KEY-----
@@ -94,11 +105,14 @@ func loadPublicKeyFromPath(path string) (*rsa.PublicKey, error) {
 }
 
 func loadPrivateKeyFromPath(path string) (*rsa.PrivateKey, error) {
-	context, err := ioutil.ReadFile(path)
+	context, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 	pemBlock, _ := pem.Decode(context)
+	if pemBlock == nil {
+		return nil, fmt.Errorf("Could not read private key from[%s]. Please make sure the file in pem format, with headers and footers.(e.g. '-----BEGIN PRIVATE KEY-----' and '-----END PRIVATE KEY-----')", path)
+	}
 	privateKey, err := x509.ParsePKCS8PrivateKey(pemBlock.Bytes)
 	return privateKey.(*rsa.PrivateKey), err
 }
