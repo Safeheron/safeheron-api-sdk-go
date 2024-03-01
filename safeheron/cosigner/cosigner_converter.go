@@ -63,7 +63,9 @@ func (c *CoSignerConverter) ResponseConverter(d any) (map[string]string, error) 
 	rand.Read(aesIv)
 	// Create params map
 	params := map[string]string{
-		"timestamp": strconv.FormatInt(time.Now().UnixMicro(), 10),
+		"timestamp": strconv.FormatInt(time.Now().UnixMilli(), 10),
+		"code":      "200",
+		"message":   "SUCCESS",
 	}
 	if d != nil {
 		payLoad, _ := json.Marshal(d)
