@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-const CBC = "CBC_PKCS7Padding"
+const CBC = "CBC_PKCS7PADDING"
 const GCM = "GCM_NOPADDING"
 
 func NewCBCDecrypter(key []byte, iv []byte, ciphertext []byte) ([]byte, error) {
