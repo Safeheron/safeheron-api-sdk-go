@@ -18,3 +18,5 @@ contractFunctionData: 0xa9059c****000000000f4240
 amount: 
 # Ethereum RPC API, example: https://goerli.infura.io/v3/802******bc2fcb
 ethereumRpcApi: https://goerli.infura.io/v3/802679315d0441069fec1ee3d2bc2fcb
+# RequestTimeout
+requestTimeout: 10000

@@ -3,6 +3,7 @@ package safeheron
 import (
 	"bytes"
 	"crypto/rand"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -30,6 +31,8 @@ type SafeheronResponse struct {
 	Key        string `form:"key" json:"key"`
 	BizContent string `form:"bizContent" json:"bizContent"`
 	Timestamp  string `form:"timestamp" json:"timestamp"`
+	RsaType    string `form:"rsaType" json:"rsaType"`
+	AesType    string `form:"aesType" json:"aesType"`
 }
 
 func (c Client) SendRequest(request any, response any, path string) error {
@@ -56,7 +59,7 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 		payLoad, _ := json.Marshal(request)
 		data := string(payLoad)
 		log.Infof("send request data: %s", data)
-		encryptBizContent, err := utils.EncryContentWithAES(data, aesKey, aesIv)
+		encryptBizContent, err := utils.EncryContentWithAESGCM(data, aesKey, aesIv)
 		if err != nil {
 			return nil, err
 		}
@@ -64,7 +67,7 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 	}
 
 	// Use Safeheron RSA public key to encrypt request's aesKey and aesIv
-	encryptedKeyAndIv, err := utils.EncryptWithRSA(append(aesKey, aesIv...), c.Config.SafeheronRsaPublicKey)
+	encryptedKeyAndIv, err := utils.EncryptWithOAEP(append(aesKey, aesIv...), c.Config.SafeheronRsaPublicKey)
 	if err != nil {
 		return nil, err
 	}
@@ -76,6 +79,8 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 		return nil, err
 	}
 	params["sig"] = signature
+	params["rsaType"] = utils.ECB_OAEP
+	params["aesType"] = utils.GCM
 
 	// Send post
 	safeheronResponse, _ := c.Post(params, endpoint)
@@ -103,19 +108,39 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 	}
 
 	// Use your RSA private key to decrypt response's aesKey and aesIv
-	plaintext, _ := utils.DecryptWithRSA(responseStruct.Key, c.Config.RsaPrivateKey)
+	//fmt.Printf(responseStruct.Key)
+
+	var plaintext []byte
+	if utils.ECB_OAEP == responseStruct.RsaType {
+		plaintext, _ = utils.DecryptWithOAEP(responseStruct.Key, c.Config.RsaPrivateKey)
+	} else {
+		plaintext, _ = utils.DecryptWithRSA(responseStruct.Key, c.Config.RsaPrivateKey)
+	}
 	resAesKey := plaintext[:32]
 	resAesIv := plaintext[32:]
 	// Use AES to decrypt bizContent
 	ciphertext, _ := base64.StdEncoding.DecodeString(responseStruct.BizContent)
-	respContent, _ := utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+	var respContent []byte
+	if utils.GCM == responseStruct.AesType {
+		respContent, _ = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
+	} else {
+		respContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+	}
 	return respContent, nil
 }
 
 func (c Client) Post(params map[string]string, path string) ([]byte, error) {
 	jsonValue, _ := json.Marshal(params)
-
-	resp, err := http.Post(fmt.Sprintf("%s%s", c.Config.BaseUrl, path), "application/json", bytes.NewBuffer(jsonValue))
+	tr := &http.Transport{
+		TLSNextProto: make(map[string]func(authority string, c *tls.Conn) http.RoundTripper),
+	}
+	var httpClient *http.Client
+	if c.Config.RequestTimeout != 0 {
+		httpClient = &http.Client{Transport: tr, Timeout: time.Duration(c.Config.RequestTimeout) * time.Millisecond}
+	} else {
+		httpClient = &http.Client{Transport: tr}
+	}
+	resp, err := httpClient.Post(fmt.Sprintf("%s%s", c.Config.BaseUrl, path), "application/json", bytes.NewBuffer(jsonValue))
 	if err != nil {
 		return nil, err
 	}

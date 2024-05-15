@@ -12,6 +12,9 @@ import (
 	"os"
 )
 
+const RSA = "RSA"
+const ECB_OAEP = "ECB_OAEP"
+
 func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
 	// Sign data with your RSA private key
 	privateKey, err := loadPrivateKeyFromPath(privateKeyPath)
@@ -49,6 +52,25 @@ func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
 	return plaintext, nil
 }
 
+func DecryptWithOAEP(base64Data string, privateKeyPath string) ([]byte, error) {
+	privateKey, err := loadPrivateKeyFromPath(privateKeyPath)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := base64.StdEncoding.DecodeString(base64Data)
+	if err != nil {
+		return nil, err
+	}
+
+	plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, privateKey, data, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return plaintext, nil
+}
+
 func EncryptWithRSA(data []byte, publicKeyPath string) (string, error) {
 	pubKey, err := loadPublicKeyFromPath(publicKeyPath)
 	if err != nil {
@@ -60,6 +82,20 @@ func EncryptWithRSA(data []byte, publicKeyPath string) (string, error) {
 	}
 	// Base64 encode
 	ciphertext := base64.StdEncoding.EncodeToString(signPKCS1v15)
+	return ciphertext, nil
+}
+
+func EncryptWithOAEP(data []byte, publicKeyPath string) (string, error) {
+	pubKey, err := loadPublicKeyFromPath(publicKeyPath)
+	if err != nil {
+		return "", err
+	}
+	signPKOAEP, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, pubKey, data, nil)
+	if err != nil {
+		return "", err
+	}
+	// Base64 encode
+	ciphertext := base64.StdEncoding.EncodeToString(signPKOAEP)
 	return ciphertext, nil
 }
 

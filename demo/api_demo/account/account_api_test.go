@@ -73,6 +73,7 @@ func setup() {
 		ApiKey:                viper.GetString("apiKey"),
 		RsaPrivateKey:         viper.GetString("privateKeyPemFile"),
 		SafeheronRsaPublicKey: viper.GetString("safeheronPublicKeyPemFile"),
+		RequestTimeout:        viper.GetInt64("requestTimeout"),
 	}}
 
 	accountApi = api.AccountApi{Client: sc}
