@@ -6,5 +6,5 @@ privateKeyPemFile: path/to/your/privateKey.pem
 safeheronPublicKeyPemFile: path/to/safeheron/publicKey.pem
 # Safeheron api url
 baseUrl: https://api.safeheron.vip
-# RequestTimeout
+# RequestTimeout (Millisecond)
 requestTimeout: 10000
