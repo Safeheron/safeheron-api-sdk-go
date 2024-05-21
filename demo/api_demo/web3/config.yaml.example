@@ -6,6 +6,8 @@ privateKeyPemFile: /path/to/your/privatekey.pem
 safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
 # Safeheron API base url
 baseUrl: https://api.safeheron.vip
+# RequestTimeout (Millisecond), Default: 10000
+requestTimeout: 10000
 # Wallet Account key
 accountKey: account3****567ee51b
 # EVM address in Wallet Account
@@ -18,5 +20,3 @@ contractFunctionData: 0xa9059c****000000000f4240
 amount: 
 # Ethereum RPC API, example: https://goerli.infura.io/v3/802******bc2fcb
 ethereumRpcApi: https://goerli.infura.io/v3/802679315d0441069fec1ee3d2bc2fcb
-# RequestTimeout (Millisecond)
-requestTimeout: 10000

@@ -39,6 +39,7 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
             ApiKey:                "d1ad6*****a572e7",
             RsaPrivateKey:         "pems/my_private.pem",
             SafeheronRsaPublicKey: "pems/safeheron_public.pem",
+            RequestTimeout: 10000
     }}
     ```
 * Call `CreateAccount` api with `sc`
@@ -77,6 +78,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip
+    # RequestTimeout (Millisecond), Default: 10000
+    requestTimeout: 10000
     ```
 * Run the test
     ```bash
@@ -98,6 +101,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip
+    # RequestTimeout (Millisecond), Default: 10000
+    requestTimeout: 10000
     # Wallet Account key
     accountKey: account****5ecad40
     # To address
@@ -123,6 +128,8 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
     safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
     # Safeheron API base url
     baseUrl: https://api.safeheron.vip
+    # RequestTimeout (Millisecond), Default: 10000
+    requestTimeout: 10000
     # Wallet Account key
     accountKey: account****5ecad40
     # Goerli testnet token address in wallet account
