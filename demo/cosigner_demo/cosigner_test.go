@@ -39,7 +39,7 @@ func TestConvert(t *testing.T) {
 	var coSignerResponse cosigner.CoSignerResponse
 	coSignerResponse.Approve = true
 	coSignerResponse.TxKey = ""
-	encryptResponse, _ := coSignerConverter.ResponseConverter(coSignerResponse)
+	encryptResponse, _ := coSignerConverter.ResponseConverterWithNewCryptoType(coSignerResponse)
 	log.Infof("encryptResponse: %s", encryptResponse)
 	//The customer returns encryptResponse after processing the business logic.
 }

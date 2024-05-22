@@ -138,7 +138,7 @@ func (c Client) Post(params map[string]string, path string) ([]byte, error) {
 	if c.Config.RequestTimeout != 0 {
 		httpClient = &http.Client{Transport: tr, Timeout: time.Duration(c.Config.RequestTimeout) * time.Millisecond}
 	} else {
-		httpClient = &http.Client{Transport: tr}
+		httpClient = &http.Client{Transport: tr, Timeout: 20000 * time.Millisecond}
 	}
 	resp, err := httpClient.Post(fmt.Sprintf("%s%s", c.Config.BaseUrl, path), "application/json", bytes.NewBuffer(jsonValue))
 	if err != nil {
