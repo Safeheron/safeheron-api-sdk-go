@@ -27,6 +27,8 @@ type CoSignerCallBack struct {
 	Sig        string `json:"sig"`
 	Key        string `json:"key"`
 	BizContent string `json:"bizContent"`
+	RsaType    string `json:"rsaType"`
+	AesType    string `json:"aesType"`
 }
 
 func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
@@ -41,13 +43,23 @@ func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 		return "", errors.New("response signature verification failed")
 	}
 	// Use your RSA private key to decrypt response's aesKey and aesIv
-	plaintext, _ := utils.DecryptWithRSA(d.Key, c.Config.BizPrivKey)
+	var plaintext []byte
+	if d.RsaType == utils.ECB_OAEP {
+		plaintext, _ = utils.DecryptWithOAEP(d.Key, c.Config.BizPrivKey)
+	} else {
+		plaintext, _ = utils.DecryptWithRSA(d.Key, c.Config.BizPrivKey)
+	}
 	resAesKey := plaintext[:32]
 	resAesIv := plaintext[32:]
 	// Use AES to decrypt bizContent
 	ciphertext, _ := base64.StdEncoding.DecodeString(d.BizContent)
-	respContent, _ := utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
-	return string(respContent), nil
+	var callBackContent []byte
+	if d.AesType == utils.GCM {
+		callBackContent, _ = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
+	} else {
+		callBackContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+	}
+	return string(callBackContent), nil
 }
 
 type CoSignerResponse struct {

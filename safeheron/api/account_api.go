@@ -16,27 +16,37 @@ type ListAccountRequest struct {
 	NameSuffix string `json:"nameSuffix,omitempty"`
 }
 
+type AccountResponse struct {
+	AccountKey   string `json:"accountKey"`
+	AccountName  string `json:"accountName"`
+	AccountIndex int32  `json:"accountIndex"`
+	AccountType  string `json:"accountType"`
+	AccountTag   string `json:"accountTag"`
+	HiddenOnUI   bool   `json:"hiddenOnUI"`
+	UsdBalance   string `json:"usdBalance"`
+	PubKeys      []struct {
+		SignAlg string `json:"signAlg"`
+		PubKey  string `json:"pubKey"`
+	} `json:"pubKeys"`
+}
+
 type ListAccountResponse struct {
-	PageNumber    int32 `json:"pageNumber"`
-	PageSize      int32 `json:"pageSize"`
-	TotalElements int64 `json:"totalElements"`
-	Content       []struct {
-		AccountKey   string `json:"accountKey"`
-		AccountName  string `json:"accountName"`
-		AccountIndex int32  `json:"accountIndex"`
-		AccountType  string `json:"accountType"`
-		AccountTag   string `json:"accountTag"`
-		HiddenOnUI   bool   `json:"hiddenOnUI"`
-		UsdBalance   string `json:"usdBalance"`
-		PubKeys      []struct {
-			SignAlg string `json:"signAlg"`
-			PubKey  string `json:"pubKey"`
-		} `json:"pubKeys"`
-	} `json:"content"`
+	PageNumber    int32             `json:"pageNumber"`
+	PageSize      int32             `json:"pageSize"`
+	TotalElements int64             `json:"totalElements"`
+	Content       []AccountResponse `json:"content"`
 }
 
 func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/account/list")
+}
+
+type OneAccountRequest struct {
+	AccountKey string `json:"accountKey,omitempty"`
+}
+
+func (e *AccountApi) OneAccounts(d OneAccountRequest, r *AccountResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/one")
 }
 
 type CreateAccountRequest struct {
@@ -67,6 +77,7 @@ func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountRespo
 
 type BatchCreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
+	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
 	Count       int32  `json:"count"`
 	AccountTag  string `json:"accountTag,omitempty"`
 }

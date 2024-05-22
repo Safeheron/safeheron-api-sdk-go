@@ -6,6 +6,8 @@ privateKeyPemFile: /path/to/your/privatekey.pem
 safeheronPublicKeyPemFile: /path/to/safeheron/api/publickey.pem
 # Safeheron API base url
 baseUrl: https://api.safeheron.vip
+# RequestTimeout (Millisecond), Default: 10000
+requestTimeout: 10000
 # Wallet Account key
 accountKey: account3****567ee51b
 # EVM address in Wallet Account

@@ -9,42 +9,44 @@ type TransactionApi struct {
 }
 
 type TransactionsRequest struct {
-	TxKey                      string `json:"txKey"`
-	TxHash                     string `json:"txHash"`
-	CoinKey                    string `json:"coinKey"`
-	TxAmount                   string `json:"txAmount"`
-	SourceAccountKey           string `json:"sourceAccountKey"`
-	SourceAccountType          string `json:"sourceAccountType"`
-	SourceAddress              string `json:"sourceAddress"`
-	DestinationAccountKey      string `json:"destinationAccountKey"`
-	DestinationAccountType     string `json:"destinationAccountType"`
-	DestinationAddress         string `json:"destinationAddress"`
-	DestinationTag             string `json:"destinationTag"`
-	TransactionType            string `json:"transactionType"`
-	TransactionStatus          string `json:"transactionStatus"`
-	TransactionSubStatus       string `json:"transactionSubStatus"`
-	CreateTime                 int64  `json:"createTime"`
-	Note                       string `json:"note"`
-	AuditUserKey               string `json:"auditUserKey"`
-	CreatedByUserKey           string `json:"createdByUserKey"`
-	TxFee                      string `json:"txFee"`
-	FeeCoinKey                 string `json:"feeCoinKey"`
-	ReplaceTxHash              string `json:"replaceTxHash"`
-	CustomerRefId              string `json:"customerRefId"`
-	CustomerExt1               string `json:"customerExt1"`
-	CustomerExt2               string `json:"customerExt2"`
-	AmlLock                    string `json:"amlLock"`
-	BlockHeight                int64  `json:"blockHeight"`
-	CompletedTime              int64  `json:"completedTime"`
-	RealDestinationAccountType string `json:"realDestinationAccountType"`
-	TransactionSubStatusDesc   string `json:"transactionSubStatusDesc"`
-	TxAmountToUsd              string `json:"txAmountToUsd"`
-	SourceAccountName          string `json:"sourceAccountName"`
-	SourceAccountTypeName      string `json:"sourceAccountTypeName"`
-	DestinationAccountName     string `json:"destinationAccountName"`
-	DestinationAccountTypeName string `json:"destinationAccountTypeName"`
-	AuditUserName              string `json:"auditUserName"`
-	CreatedByUserName          string `json:"createdByUserName"`
+	TxKey                      string               `json:"txKey"`
+	TxHash                     string               `json:"txHash"`
+	CoinKey                    string               `json:"coinKey"`
+	TxAmount                   string               `json:"txAmount"`
+	SourceAccountKey           string               `json:"sourceAccountKey"`
+	SourceAccountType          string               `json:"sourceAccountType"`
+	SourceAddress              string               `json:"sourceAddress"`
+	SourceAddressList          []SourceAddress      `json:"sourceAddressList"`
+	DestinationAccountKey      string               `json:"destinationAccountKey"`
+	DestinationAccountType     string               `json:"destinationAccountType"`
+	DestinationAddress         string               `json:"destinationAddress"`
+	DestinationAddressList     []DestinationAddress `json:"destinationAddressList"`
+	DestinationTag             string               `json:"destinationTag"`
+	TransactionType            string               `json:"transactionType"`
+	TransactionStatus          string               `json:"transactionStatus"`
+	TransactionSubStatus       string               `json:"transactionSubStatus"`
+	CreateTime                 int64                `json:"createTime"`
+	Note                       string               `json:"note"`
+	AuditUserKey               string               `json:"auditUserKey"`
+	CreatedByUserKey           string               `json:"createdByUserKey"`
+	TxFee                      string               `json:"txFee"`
+	FeeCoinKey                 string               `json:"feeCoinKey"`
+	ReplaceTxHash              string               `json:"replaceTxHash"`
+	CustomerRefId              string               `json:"customerRefId"`
+	CustomerExt1               string               `json:"customerExt1"`
+	CustomerExt2               string               `json:"customerExt2"`
+	AmlLock                    string               `json:"amlLock"`
+	BlockHeight                int64                `json:"blockHeight"`
+	CompletedTime              int64                `json:"completedTime"`
+	RealDestinationAccountType string               `json:"realDestinationAccountType"`
+	TransactionSubStatusDesc   string               `json:"transactionSubStatusDesc"`
+	TxAmountToUsd              string               `json:"txAmountToUsd"`
+	SourceAccountName          string               `json:"sourceAccountName"`
+	SourceAccountTypeName      string               `json:"sourceAccountTypeName"`
+	DestinationAccountName     string               `json:"destinationAccountName"`
+	DestinationAccountTypeName string               `json:"destinationAccountTypeName"`
+	AuditUserName              string               `json:"auditUserName"`
+	CreatedByUserName          string               `json:"createdByUserName"`
 }
 
 type ListTransactionsV1Request struct {
@@ -110,34 +112,39 @@ func (e *TransactionApi) ListTransactionsV2(d ListTransactionsV2Request, r *Tran
 }
 
 type CreateTransactionsRequest struct {
-	CustomerRefId string `json:"customerRefId"`
-	CustomerExt1  string `json:"customerExt1,omitempty"`
-	CustomerExt2  string `json:"customerExt2,omitempty"`
-	Note          string `json:"note,omitempty"`
-	CoinKey       string `json:"coinKey"`
-	TxFeeLevel    string `json:"txFeeLevel,omitempty"`
-	FeeRateDto    struct {
-		FeeRate        string `json:"feeRate,omitempty"`
-		GasLimit       string `json:"gasLimit,omitempty"`
-		MaxPriorityFee string `json:"maxPriorityFee,omitempty"`
-		MaxFee         string `json:"maxFee,omitempty"`
-		GasPremium     string `json:"gasPremium,omitempty"`
-		GasFeeCap      string `json:"gasFeeCap,omitempty"`
-		GasBudget      string `json:"gasBudget,omitempty"`
-	} `json:"feeRateDto,omitempty"`
-	MaxTxFeeRate           string `json:"maxTxFeeRate,omitempty"`
-	TxAmount               string `json:"txAmount"`
-	TreatAsGrossAmount     bool   `json:"treatAsGrossAmount,omitempty"`
-	SourceAccountKey       string `json:"sourceAccountKey"`
-	SourceAccountType      string `json:"sourceAccountType"`
-	DestinationAccountKey  string `json:"destinationAccountKey,omitempty"`
-	DestinationAccountType string `json:"destinationAccountType"`
-	DestinationAddress     string `json:"destinationAddress,omitempty"`
-	DestinationTag         string `json:"destinationTag,omitempty"`
-	IsRbf                  bool   `json:"isRbf,omitempty"`
-	FailOnContract         bool   `json:"failOnContract,omitempty"`
-	Nonce                  int64  `json:"nonce,omitempty"`
-	BalanceVerifyType      string `json:"balanceVerifyType,omitempty"`
+	CustomerRefId          string     `json:"customerRefId"`
+	CustomerExt1           string     `json:"customerExt1,omitempty"`
+	CustomerExt2           string     `json:"customerExt2,omitempty"`
+	Note                   string     `json:"note,omitempty"`
+	CoinKey                string     `json:"coinKey"`
+	TxFeeLevel             string     `json:"txFeeLevel,omitempty"`
+	FeeRateDto             FeeRateDto `json:"feeRateDto,omitempty"`
+	MaxTxFeeRate           string     `json:"maxTxFeeRate,omitempty"`
+	TxAmount               string     `json:"txAmount"`
+	TreatAsGrossAmount     bool       `json:"treatAsGrossAmount,omitempty"`
+	SourceAccountKey       string     `json:"sourceAccountKey"`
+	SourceAccountType      string     `json:"sourceAccountType"`
+	DestinationAccountKey  string     `json:"destinationAccountKey,omitempty"`
+	DestinationAccountType string     `json:"destinationAccountType"`
+	DestinationAddress     string     `json:"destinationAddress,omitempty"`
+	DestinationTag         string     `json:"destinationTag,omitempty"`
+	IsRbf                  bool       `json:"isRbf,omitempty"`
+	FailOnContract         bool       `json:"failOnContract,omitempty"`
+	Nonce                  int64      `json:"nonce,omitempty"`
+	SequenceNumber         int64      `json:"sequenceNumber,omitempty"`
+	BalanceVerifyType      string     `json:"balanceVerifyType,omitempty"`
+}
+
+type FeeRateDto struct {
+	FeeRate        string `json:"feeRate,omitempty"`
+	GasLimit       string `json:"gasLimit,omitempty"`
+	MaxPriorityFee string `json:"maxPriorityFee,omitempty"`
+	MaxFee         string `json:"maxFee,omitempty"`
+	GasPremium     string `json:"gasPremium,omitempty"`
+	GasFeeCap      string `json:"gasFeeCap,omitempty"`
+	GasBudget      string `json:"gasBudget,omitempty"`
+	GasUnitPrice   string `json:"gasUnitPrice,omitempty"`
+	MaxGasAmount   string `json:"maxGasAmount,omitempty"`
 }
 
 type TxKeyResult struct {
@@ -148,20 +155,41 @@ func (e *TransactionApi) CreateTransactions(d CreateTransactionsRequest, r *TxKe
 	return e.Client.SendRequest(d, r, "/v2/transactions/create")
 }
 
+type CreateTransactionsUTXOMultiDestRequest struct {
+	CustomerRefId          string               `json:"customerRefId"`
+	CustomerExt1           string               `json:"customerExt1,omitempty"`
+	CustomerExt2           string               `json:"customerExt2,omitempty"`
+	Note                   string               `json:"note,omitempty"`
+	CoinKey                string               `json:"coinKey"`
+	TxFeeLevel             string               `json:"txFeeLevel,omitempty"`
+	FeeRateDto             FeeRateDto           `json:"feeRateDto,omitempty"`
+	MaxTxFeeRate           string               `json:"maxTxFeeRate,omitempty"`
+	SourceAccountKey       string               `json:"sourceAccountKey"`
+	SourceAccountType      string               `json:"sourceAccountType"`
+	DestinationAddressList []DestinationAddress `json:"destinationAddressList,omitempty"`
+	DestinationTag         string               `json:"destinationTag,omitempty"`
+	IsRbf                  bool                 `json:"isRbf,omitempty"`
+}
+
+type SourceAddress struct {
+	Address string `json:"address"`
+}
+
+type DestinationAddress struct {
+	Address string `json:"address"`
+	Amount  string `json:"amount"`
+}
+
+func (e *TransactionApi) CreateTransactionsUTXOMultiDest(d CreateTransactionsUTXOMultiDestRequest, r *TxKeyResult) error {
+	return e.Client.SendRequest(d, r, "/v1/transactions/utxo/multidest/create")
+}
+
 type RecreateTransactionRequest struct {
-	TxKey      string `json:"txKey"`
-	TxHash     string `json:"txHash"`
-	CoinKey    string `json:"coinKey"`
-	TxFeeLevel string `json:"txFeeLevel,omitempty"`
-	FeeRateDto struct {
-		FeeRate        string `json:"feeRate,omitempty"`
-		GasLimit       string `json:"gasLimit,omitempty"`
-		MaxPriorityFee string `json:"maxPriorityFee,omitempty"`
-		MaxFee         string `json:"maxFee,omitempty"`
-		GasPremium     string `json:"gasPremium,omitempty"`
-		GasFeeCap      string `json:"gasFeeCap,omitempty"`
-		GasBudget      string `json:"gasBudget,omitempty"`
-	} `json:"feeRateDto,omitempty"`
+	TxKey      string     `json:"txKey"`
+	TxHash     string     `json:"txHash"`
+	CoinKey    string     `json:"coinKey"`
+	TxFeeLevel string     `json:"txFeeLevel,omitempty"`
+	FeeRateDto FeeRateDto `json:"feeRateDto,omitempty"`
 }
 
 func (e *TransactionApi) RecreateTransactions(d RecreateTransactionRequest, r *TxKeyResult) error {
@@ -181,9 +209,11 @@ type OneTransactionsResponse struct {
 	SourceAccountKey           string                `json:"sourceAccountKey"`
 	SourceAccountType          string                `json:"sourceAccountType"`
 	SourceAddress              string                `json:"sourceAddress"`
+	SourceAddressList          []SourceAddress       `json:"sourceAddressList"`
 	DestinationAccountKey      string                `json:"destinationAccountKey"`
 	DestinationAccountType     string                `json:"destinationAccountType"`
 	DestinationAddress         string                `json:"destinationAddress"`
+	DestinationAddressList     []DestinationAddress  `json:"destinationAddressList"`
 	DestinationTag             string                `json:"destinationTag"`
 	TransactionType            string                `json:"transactionType"`
 	TransactionStatus          string                `json:"transactionStatus"`
@@ -218,11 +248,13 @@ func (e *TransactionApi) OneTransactions(d OneTransactionsRequest, r *OneTransac
 }
 
 type TransactionsFeeRateRequest struct {
-	CoinKey          string `json:"coinKey"`
-	TxHash           string `json:"txHash,omitempty"`
-	SourceAccountKey string `json:"sourceAccountKey,omitempty"`
-	SourceAddress    bool   `json:"sourceAddress,omitempty"`
-	Value            string `json:"value,omitempty"`
+	CoinKey                string               `json:"coinKey"`
+	TxHash                 string               `json:"txHash,omitempty"`
+	SourceAccountKey       string               `json:"sourceAccountKey,omitempty"`
+	SourceAddress          bool                 `json:"sourceAddress,omitempty"`
+	DestinationAddress     string               `json:"destinationAddress"`
+	DestinationAddressList []DestinationAddress `json:"destinationAddressList"`
+	Value                  string               `json:"value,omitempty"`
 }
 
 type FeeRate struct {
@@ -236,6 +268,8 @@ type FeeRate struct {
 	GasPremium     string `json:"gasPremium "`
 	GasFeeCap      string `json:"gasFeeCap"`
 	GasBudget      string `json:"gasBudget"`
+	GasUnitPrice   string `json:"gasUnitPrice"`
+	MaxGasAmount   string `json:"maxGasAmount"`
 }
 
 type TransactionsFeeRateResponse struct {
