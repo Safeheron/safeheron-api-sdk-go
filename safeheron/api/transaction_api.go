@@ -155,7 +155,7 @@ func (e *TransactionApi) CreateTransactions(d CreateTransactionsRequest, r *TxKe
 	return e.Client.SendRequest(d, r, "/v2/transactions/create")
 }
 
-type CreateTransactionsUTXOMultidestRequest struct {
+type CreateTransactionsUTXOMultiDestRequest struct {
 	CustomerRefId          string               `json:"customerRefId"`
 	CustomerExt1           string               `json:"customerExt1,omitempty"`
 	CustomerExt2           string               `json:"customerExt2,omitempty"`
@@ -180,7 +180,7 @@ type DestinationAddress struct {
 	Amount  string `json:"amount"`
 }
 
-func (e *TransactionApi) CreateTransactionsUTXOMultidest(d CreateTransactionsUTXOMultidestRequest, r *TxKeyResult) error {
+func (e *TransactionApi) CreateTransactionsUTXOMultiDest(d CreateTransactionsUTXOMultiDestRequest, r *TxKeyResult) error {
 	return e.Client.SendRequest(d, r, "/v1/transactions/utxo/multidest/create")
 }
 

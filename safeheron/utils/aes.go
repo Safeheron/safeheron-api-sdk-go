@@ -9,7 +9,6 @@ import (
 	"io"
 )
 
-const CBC = "CBC_PKCS7PADDING"
 const GCM = "GCM_NOPADDING"
 
 func NewCBCDecrypter(key []byte, iv []byte, ciphertext []byte) ([]byte, error) {
@@ -29,13 +28,13 @@ func NewGCMDecrypter(key []byte, iv []byte, ciphertext []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	aesGCM, err := cipher.NewGCMWithNonceSize(block, len(iv))
 	if err != nil {
 		return nil, err
 	}
 
 	decrypted, err := aesGCM.Open(nil, iv, ciphertext, nil)
+
 	if err != nil {
 		return nil, err
 	}

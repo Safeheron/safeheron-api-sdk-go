@@ -12,7 +12,6 @@ import (
 	"os"
 )
 
-const RSA = "RSA"
 const ECB_OAEP = "ECB_OAEP"
 
 func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
