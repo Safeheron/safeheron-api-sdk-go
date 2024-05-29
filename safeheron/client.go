@@ -53,7 +53,7 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 	// Create params map
 	params := map[string]string{
 		"apiKey":    c.Config.ApiKey,
-		"timestamp": strconv.FormatInt(time.Now().UnixMicro(), 10),
+		"timestamp": strconv.FormatInt(time.Now().UnixMilli(), 10),
 	}
 	if request != nil {
 		payLoad, _ := json.Marshal(request)
