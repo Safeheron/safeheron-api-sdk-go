@@ -108,8 +108,8 @@ func (e *AccountApi) UpdateAccountShowState(d UpdateAccountShowStateRequest, r *
 }
 
 type BatchUpdateAccountTagRequest struct {
-	AccountKey string `json:"accountKey"`
-	AccountTag string `json:"accountTag"`
+	AccountKeyList []string `json:"accountKeyList"`
+	AccountTag     string   `json:"accountTag"`
 }
 
 func (e *AccountApi) batchUpdateAccountTag(d BatchUpdateAccountTagRequest, r *ResultResponse) error {
