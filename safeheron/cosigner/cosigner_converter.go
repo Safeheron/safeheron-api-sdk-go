@@ -40,7 +40,7 @@ func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 	// Verify sign
 	verifyRet := utils.VerifySignWithRSA(serializeParams(responseStringMap), d.Sig, c.Config.ApiPubKey)
 	if !verifyRet {
-		return "", errors.New("response signature verification failed")
+		return "", errors.New("CoSignerCallBack signature verification failed")
 	}
 	// Use your RSA private key to decrypt response's aesKey and aesIv
 	var plaintext []byte
