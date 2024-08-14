@@ -9,22 +9,24 @@ type AccountApi struct {
 }
 
 type ListAccountRequest struct {
-	PageNumber int    `json:"pageNumber,omitempty"`
-	PageSize   int    `json:"pageSize,omitempty"`
-	HiddenOnUI bool   `json:"hiddenOnUI,omitempty"`
-	NamePrefix string `json:"namePrefix,omitempty"`
-	NameSuffix string `json:"nameSuffix,omitempty"`
+	PageNumber    int    `json:"pageNumber,omitempty"`
+	PageSize      int    `json:"pageSize,omitempty"`
+	HiddenOnUI    bool   `json:"hiddenOnUI,omitempty"`
+	NamePrefix    string `json:"namePrefix,omitempty"`
+	NameSuffix    string `json:"nameSuffix,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
 }
 
 type AccountResponse struct {
-	AccountKey   string `json:"accountKey"`
-	AccountName  string `json:"accountName"`
-	AccountIndex int32  `json:"accountIndex"`
-	AccountType  string `json:"accountType"`
-	AccountTag   string `json:"accountTag"`
-	HiddenOnUI   bool   `json:"hiddenOnUI"`
-	UsdBalance   string `json:"usdBalance"`
-	PubKeys      []struct {
+	AccountKey    string `json:"accountKey"`
+	CustomerRefId string `json:"customerRefId"`
+	AccountName   string `json:"accountName"`
+	AccountIndex  int32  `json:"accountIndex"`
+	AccountType   string `json:"accountType"`
+	AccountTag    string `json:"accountTag"`
+	HiddenOnUI    bool   `json:"hiddenOnUI"`
+	UsdBalance    string `json:"usdBalance"`
+	PubKeys       []struct {
 		SignAlg string `json:"signAlg"`
 		PubKey  string `json:"pubKey"`
 	} `json:"pubKeys"`
@@ -42,7 +44,8 @@ func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) 
 }
 
 type OneAccountRequest struct {
-	AccountKey string `json:"accountKey,omitempty"`
+	AccountKey    string `json:"accountKey,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
 }
 
 func (e *AccountApi) OneAccounts(d OneAccountRequest, r *AccountResponse) error {
@@ -50,10 +53,11 @@ func (e *AccountApi) OneAccounts(d OneAccountRequest, r *AccountResponse) error 
 }
 
 type CreateAccountRequest struct {
-	AccountName string   `json:"accountName,omitempty"`
-	HiddenOnUI  bool     `json:"hiddenOnUI,omitempty"`
-	AccountTag  string   `json:"accountTag,omitempty"`
-	CoinKeyList []string `json:"coinKeyList,omitempty"`
+	AccountName   string   `json:"accountName,omitempty"`
+	CustomerRefId string   `json:"customerRefId,omitempty"`
+	HiddenOnUI    bool     `json:"hiddenOnUI,omitempty"`
+	AccountTag    string   `json:"accountTag,omitempty"`
+	CoinKeyList   []string `json:"coinKeyList,omitempty"`
 }
 
 type CreateAccountResponse struct {
@@ -67,6 +71,7 @@ type CreateAccountResponse struct {
 		AddressList []struct {
 			Address     string `json:"address"`
 			AddressType string `json:"addressType"`
+			DerivePath  string `json:"derivePath"`
 		} `json:"addressList"`
 	} `json:"coinAddressList"`
 }
@@ -124,6 +129,7 @@ type AddCoinRequest struct {
 type AddCoinResponse []struct {
 	Address     string `json:"address"`
 	AddressType string `json:"addressType"`
+	DerivePath  string `json:"derivePath"`
 }
 
 func (e *AccountApi) AddCoin(d AddCoinRequest, r *AddCoinResponse) error {
@@ -141,6 +147,7 @@ type BatchCreateAccountCoinResponse []struct {
 	AddressList []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
+		DerivePath  string `json:"derivePath"`
 	} `json:"addressList"`
 }
 
@@ -171,6 +178,7 @@ type AccountCoinResponse []struct {
 	AddressList       []struct {
 		Address        string `json:"address"`
 		AddressType    string `json:"addressType"`
+		DerivePath     string `json:"derivePath"`
 		AddressBalance string `json:"addressBalance"`
 	} `json:"addressList"`
 }
@@ -196,6 +204,7 @@ type AccountCoinAddressResponse struct {
 		AddressList      []struct {
 			Address        string `json:"address"`
 			AddressType    string `json:"addressType"`
+			DerivePath     string `json:"derivePath"`
 			AddressBalance string `json:"addressBalance"`
 		} `json:"addressList"`
 	} `json:"content"`
@@ -213,6 +222,7 @@ type InfoAccountCoinAddressRequest struct {
 type InfoAccountCoinAddressResponse struct {
 	Address        string `json:"address"`
 	AddressType    string `json:"addressType"`
+	DerivePath     string `json:"derivePath"`
 	AddressBalance string `json:"addressBalance"`
 	AccountKey     string `json:"accountKey"`
 }
@@ -239,6 +249,7 @@ type CreateAccountCoinAddressRequest struct {
 type CreateAccountCoinAddressResponse struct {
 	Address     string `json:"address"`
 	AddressType string `json:"addressType"`
+	DerivePath  string `json:"derivePath"`
 }
 
 func (e *AccountApi) CreateAccountCoinAddress(d CreateAccountCoinAddressRequest, r *CreateAccountCoinAddressResponse) error {
@@ -257,6 +268,7 @@ type BatchCreateAccountCoinUTXOResponse []struct {
 	AddressList []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
+		DerivePath  string `json:"derivePath"`
 	} `json:"addressList"`
 }
 

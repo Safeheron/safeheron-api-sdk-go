@@ -9,21 +9,24 @@ type Web3Api struct {
 }
 
 type CreateWeb3AccountRequest struct {
-	AccountName string `json:"accountName,omitempty"`
-	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
+	AccountName   string `json:"accountName,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
+	HiddenOnUI    bool   `json:"hiddenOnUI,omitempty"`
 }
 
 type CreateWeb3AccountResponse struct {
-	AccountKey  string `json:"accountKey"`
-	AccountName string `json:"accountName"`
-	HiddenOnUI  bool   `json:"hiddenOnUI"`
-	PubKeyList  []struct {
+	AccountKey    string `json:"accountKey"`
+	CustomerRefId string `json:"customerRefId"`
+	AccountName   string `json:"accountName"`
+	HiddenOnUI    bool   `json:"hiddenOnUI"`
+	PubKeyList    []struct {
 		SignAlg string `json:"signAlg"`
 		PubKey  string `json:"pubKey"`
 	} `json:"pubKeyList"`
 	AddressList []struct {
 		BlockchainType string `json:"blockchainType"`
 		Address        string `json:"address"`
+		DerivePath     string `json:"derivePath"`
 	} `json:"addressList"`
 }
 
@@ -45,6 +48,7 @@ type BatchCreateWeb3AccountResponse []struct {
 	AddressList []struct {
 		BlockchainType string `json:"blockchainType"`
 		Address        string `json:"address"`
+		DerivePath     string `json:"derivePath"`
 	} `json:"addressList"`
 }
 
@@ -53,10 +57,11 @@ func (e *Web3Api) BatchCreateWeb3Account(d BatchCreateWeb3AccountRequest, r *Bat
 }
 
 type ListWeb3AccountRequest struct {
-	Direct     string `json:"direct,omitempty"`
-	Limit      int32  `json:"limit,omitempty"`
-	FromId     string `json:"fromId,omitempty"`
-	NamePrefix string `json:"namePrefix,omitempty"`
+	Direct        string `json:"direct,omitempty"`
+	Limit         int32  `json:"limit,omitempty"`
+	FromId        string `json:"fromId,omitempty"`
+	NamePrefix    string `json:"namePrefix,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
 }
 
 func (e *Web3Api) ListWeb3Accounts(d ListWeb3AccountRequest, r *[]CreateWeb3AccountResponse) error {
