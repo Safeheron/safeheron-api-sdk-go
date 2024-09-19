@@ -128,8 +128,8 @@ type CreateTransactionsRequest struct {
 	DestinationAccountType string     `json:"destinationAccountType"`
 	DestinationAddress     string     `json:"destinationAddress,omitempty"`
 	DestinationTag         string     `json:"destinationTag,omitempty"`
-	IsRbf                  bool       `json:"isRbf,omitempty"`
-	FailOnContract         bool       `json:"failOnContract,omitempty"`
+	IsRbf                  *bool      `json:"isRbf,omitempty"`
+	FailOnContract         *bool      `json:"failOnContract,omitempty"`
 	Nonce                  int64      `json:"nonce,omitempty"`
 	SequenceNumber         int64      `json:"sequenceNumber,omitempty"`
 	BalanceVerifyType      string     `json:"balanceVerifyType,omitempty"`
@@ -251,7 +251,7 @@ type TransactionsFeeRateRequest struct {
 	CoinKey                string               `json:"coinKey"`
 	TxHash                 string               `json:"txHash,omitempty"`
 	SourceAccountKey       string               `json:"sourceAccountKey,omitempty"`
-	SourceAddress          bool                 `json:"sourceAddress,omitempty"`
+	SourceAddress          string               `json:"sourceAddress,omitempty"`
 	DestinationAddress     string               `json:"destinationAddress"`
 	DestinationAddressList []DestinationAddress `json:"destinationAddressList"`
 	Value                  string               `json:"value,omitempty"`
