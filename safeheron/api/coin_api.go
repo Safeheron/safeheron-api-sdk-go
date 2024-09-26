@@ -85,7 +85,7 @@ type CoinBlockHeightRequest struct {
 	CoinKey string `json:"coinKey"`
 }
 
-type CoinBlockHeightResponse struct {
+type CoinBlockHeightResponse []struct {
 	CoinKey          string `json:"coinKey"`
 	LocalBlockHeight string `json:"localBlockHeight"`
 }
