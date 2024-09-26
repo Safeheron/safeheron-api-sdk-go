@@ -11,7 +11,7 @@ type AccountApi struct {
 type ListAccountRequest struct {
 	PageNumber    int    `json:"pageNumber,omitempty"`
 	PageSize      int    `json:"pageSize,omitempty"`
-	HiddenOnUI    bool   `json:"hiddenOnUI,omitempty"`
+	HiddenOnUI    *bool  `json:"hiddenOnUI,omitempty"`
 	NamePrefix    string `json:"namePrefix,omitempty"`
 	NameSuffix    string `json:"nameSuffix,omitempty"`
 	CustomerRefId string `json:"customerRefId,omitempty"`
