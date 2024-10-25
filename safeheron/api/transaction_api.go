@@ -172,12 +172,14 @@ type CreateTransactionsUTXOMultiDestRequest struct {
 }
 
 type SourceAddress struct {
-	Address string `json:"address"`
+	Address         string `json:"address"`
+	AddressGroupKey string `json:"addressGroupKey"`
 }
 
 type DestinationAddress struct {
-	Address string `json:"address"`
-	Amount  string `json:"amount"`
+	Address         string `json:"address"`
+	Amount          string `json:"amount"`
+	AddressGroupKey string `json:"addressGroupKey"`
 }
 
 func (e *TransactionApi) CreateTransactionsUTXOMultiDest(d CreateTransactionsUTXOMultiDestRequest, r *TxKeyResult) error {

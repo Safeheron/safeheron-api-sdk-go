@@ -67,8 +67,10 @@ type CreateAccountResponse struct {
 		PubKey  string `json:"pubKey"`
 	} `json:"pubKeys"`
 	CoinAddressList []struct {
-		CoinKey     string `json:"coinKey"`
-		AddressList []struct {
+		CoinKey          string `json:"coinKey"`
+		AddressGroupKey  string `json:"addressGroupKey"`
+		AddressGroupName string `json:"addressGroupName"`
+		AddressList      []struct {
 			Address     string `json:"address"`
 			AddressType string `json:"addressType"`
 			DerivePath  string `json:"derivePath"`
@@ -136,6 +138,29 @@ func (e *AccountApi) AddCoin(d AddCoinRequest, r *AddCoinResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/account/coin/create")
 }
 
+type AddCoinV2Request struct {
+	CoinKeyList []string `json:"coinKeyList,omitempty"`
+	AccountKey  string   `json:"accountKey,omitempty"`
+}
+
+type AddCoinV2Response struct {
+	AccountKey      string `json:"accountKey"`
+	CoinAddressList []struct {
+		CoinKey          string `json:"coinKey"`
+		AddressGroupKey  string `json:"addressGroupKey"`
+		AddressGroupName string `json:"addressGroupName"`
+		AddressList      []struct {
+			Address     string `json:"address"`
+			AddressType string `json:"addressType"`
+			DerivePath  string `json:"derivePath"`
+		} `json:"addressList"`
+	} `json:"coinAddressList"`
+}
+
+func (e *AccountApi) AddCoinV2(d AddCoinV2Request, r *AddCoinV2Response) error {
+	return e.Client.SendRequest(d, r, "/v2/account/coin/create")
+}
+
 type BatchCreateAccountCoinRequest struct {
 	CoinKey          string   `json:"coinKey"`
 	AccountKeyList   []string `json:"accountKeyList"`
@@ -143,8 +168,10 @@ type BatchCreateAccountCoinRequest struct {
 }
 
 type BatchCreateAccountCoinResponse []struct {
-	AccountKey  string `json:"accountKey"`
-	AddressList []struct {
+	AccountKey       string `json:"accountKey"`
+	AddressGroupKey  string `json:"addressGroupKey"`
+	AddressGroupName string `json:"addressGroupName"`
+	AddressList      []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
 		DerivePath  string `json:"derivePath"`
@@ -188,10 +215,11 @@ func (e *AccountApi) ListAccountCoin(d ListAccountCoinRequest, r *AccountCoinRes
 }
 
 type ListAccountCoinAddressRequest struct {
-	PageNumber int    `json:"pageNumber,omitempty"`
-	PageSize   int    `json:"pageSize,omitempty"`
-	CoinKey    string `json:"coinKey"`
-	AccountKey string `json:"accountKey"`
+	PageNumber    int    `json:"pageNumber,omitempty"`
+	PageSize      int    `json:"pageSize,omitempty"`
+	CoinKey       string `json:"coinKey"`
+	AccountKey    string `json:"accountKey"`
+	CustomerRefId string `json:"customerRefId"`
 }
 
 type AccountCoinAddressResponse struct {
@@ -201,6 +229,7 @@ type AccountCoinAddressResponse struct {
 	Content       []struct {
 		AddressGroupKey  string `json:"addressGroupKey"`
 		AddressGroupName string `json:"addressGroupName"`
+		CustomerRefId    string `json:"customerRefId"`
 		AddressList      []struct {
 			Address        string `json:"address"`
 			AddressType    string `json:"addressType"`
@@ -244,6 +273,7 @@ type CreateAccountCoinAddressRequest struct {
 	CoinKey          string `json:"coinKey"`
 	AccountKey       string `json:"accountKey"`
 	AddressGroupName string `json:"addressGroupName"`
+	CustomerRefId    string `json:"customerRefId"`
 }
 
 type CreateAccountCoinAddressResponse struct {
@@ -256,6 +286,21 @@ func (e *AccountApi) CreateAccountCoinAddress(d CreateAccountCoinAddressRequest,
 	return e.Client.SendRequest(d, r, "/v1/account/coin/address/create")
 }
 
+type CreateAccountCoinAddressV2Response struct {
+	AddressGroupKey  string `json:"addressGroupKey"`
+	AddressGroupName string `json:"addressGroupName"`
+	AddressList      []struct {
+		Address        string `json:"address"`
+		AddressType    string `json:"addressType"`
+		DerivePath     string `json:"derivePath"`
+		AddressBalance string `json:"addressBalance"`
+	} `json:"addressList"`
+}
+
+func (e *AccountApi) CreateAccountCoinAddressV2(d CreateAccountCoinAddressRequest, r *CreateAccountCoinAddressV2Response) error {
+	return e.Client.SendRequest(d, r, "/v2/account/coin/address/create")
+}
+
 type BatchCreateAccountCoinUTXORequest struct {
 	CoinKey          string `json:"coinKey"`
 	AccountKey       string `json:"accountKey"`
@@ -264,8 +309,10 @@ type BatchCreateAccountCoinUTXORequest struct {
 }
 
 type BatchCreateAccountCoinUTXOResponse []struct {
-	AccountKey  string `json:"accountKey"`
-	AddressList []struct {
+	AccountKey       string `json:"accountKey"`
+	AddressGroupKey  string `json:"addressGroupKey"`
+	AddressGroupName string `json:"addressGroupName"`
+	AddressList      []struct {
 		Address     string `json:"address"`
 		AddressType string `json:"addressType"`
 		DerivePath  string `json:"derivePath"`
