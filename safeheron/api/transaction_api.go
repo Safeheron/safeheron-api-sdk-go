@@ -47,6 +47,7 @@ type TransactionsRequest struct {
 	DestinationAccountTypeName string               `json:"destinationAccountTypeName"`
 	AuditUserName              string               `json:"auditUserName"`
 	CreatedByUserName          string               `json:"createdByUserName"`
+	TransactionDirection       string               `json:"transactionDirection"`
 }
 
 type ListTransactionsV1Request struct {
@@ -69,6 +70,7 @@ type ListTransactionsV1Request struct {
 	CustomerRefId              string `json:"customerRefId,omitempty"`
 	RealDestinationAccountType string `json:"realDestinationAccountType,omitempty"`
 	HideSmallAmountUsd         string `json:"hideSmallAmountUsd,omitempty"`
+	TransactionDirection       string `json:"transactionDirection,omitempty"`
 }
 
 type TransactionsResponseV1 struct {
@@ -103,6 +105,7 @@ type ListTransactionsV2Request struct {
 	CustomerRefId              string `json:"customerRefId,omitempty"`
 	RealDestinationAccountType string `json:"realDestinationAccountType,omitempty"`
 	HideSmallAmountUsd         string `json:"hideSmallAmountUsd,omitempty"`
+	TransactionDirection       string `json:"transactionDirection,omitempty"`
 }
 
 type TransactionsResponseV2 []TransactionsRequest
@@ -243,6 +246,7 @@ type OneTransactionsResponse struct {
 	AuditUserName              string                `json:"auditUserName"`
 	CreatedByUserName          string                `json:"createdByUserName"`
 	SpeedUpHistory             []TransactionsRequest `json:"speedUpHistory"`
+	TransactionDirection       string                `json:"transactionDirection"`
 }
 
 func (e *TransactionApi) OneTransactions(d OneTransactionsRequest, r *OneTransactionsResponse) error {
