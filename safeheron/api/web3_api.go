@@ -69,12 +69,13 @@ func (e *Web3Api) ListWeb3Accounts(d ListWeb3AccountRequest, r *[]CreateWeb3Acco
 }
 
 type EthSignRequest struct {
-	AccountKey    string `json:"accountKey"`
-	CustomerRefId string `json:"customerRefId"`
-	Note          string `json:"note,omitempty"`
-	CustomerExt1  string `json:"customerExt1,omitempty"`
-	CustomerExt2  string `json:"customerExt2,omitempty"`
-	MessageHash   struct {
+	AccountKey       string `json:"accountKey"`
+	CustomerRefId    string `json:"customerRefId"`
+	Note             string `json:"note,omitempty"`
+	CustomerExt1     string `json:"customerExt1,omitempty"`
+	CustomerExt2     string `json:"customerExt2,omitempty"`
+	UseCustomNetwork bool   `json:"useCustomNetwork,omitempty"`
+	MessageHash      struct {
 		ChainId int64    `json:"chainId"`
 		Hash    []string `json:"hash"`
 	} `json:"messageHash"`
@@ -85,12 +86,13 @@ func (e *Web3Api) EthSign(d EthSignRequest, r *TxKeyResult) error {
 }
 
 type PersonalSignRequest struct {
-	AccountKey    string `json:"accountKey"`
-	CustomerRefId string `json:"customerRefId"`
-	Note          string `json:"note,omitempty"`
-	CustomerExt1  string `json:"customerExt1,omitempty"`
-	CustomerExt2  string `json:"customerExt2,omitempty"`
-	Message       struct {
+	AccountKey       string `json:"accountKey"`
+	CustomerRefId    string `json:"customerRefId"`
+	Note             string `json:"note,omitempty"`
+	CustomerExt1     string `json:"customerExt1,omitempty"`
+	CustomerExt2     string `json:"customerExt2,omitempty"`
+	UseCustomNetwork bool   `json:"useCustomNetwork,omitempty"`
+	Message          struct {
 		ChainId int64  `json:"chainId"`
 		Data    string `json:"data"`
 	} `json:"message"`
@@ -101,12 +103,13 @@ func (e *Web3Api) PersonalSign(d PersonalSignRequest, r *TxKeyResult) error {
 }
 
 type EthSignTypedDataRequest struct {
-	AccountKey    string `json:"accountKey"`
-	CustomerRefId string `json:"customerRefId"`
-	Note          string `json:"note,omitempty"`
-	CustomerExt1  string `json:"customerExt1,omitempty"`
-	CustomerExt2  string `json:"customerExt2,omitempty"`
-	Message       struct {
+	AccountKey       string `json:"accountKey"`
+	CustomerRefId    string `json:"customerRefId"`
+	Note             string `json:"note,omitempty"`
+	CustomerExt1     string `json:"customerExt1,omitempty"`
+	CustomerExt2     string `json:"customerExt2,omitempty"`
+	UseCustomNetwork bool   `json:"useCustomNetwork,omitempty"`
+	Message          struct {
 		ChainId int64  `json:"chainId"`
 		Data    string `json:"data"`
 		Version string `json:"version"`
@@ -118,12 +121,13 @@ func (e *Web3Api) EthSignTypedData(d EthSignTypedDataRequest, r *TxKeyResult) er
 }
 
 type EthSignTransactionRequest struct {
-	AccountKey    string `json:"accountKey"`
-	CustomerRefId string `json:"customerRefId"`
-	Note          string `json:"note,omitempty"`
-	CustomerExt1  string `json:"customerExt1,omitempty"`
-	CustomerExt2  string `json:"customerExt2,omitempty"`
-	Transaction   struct {
+	AccountKey       string `json:"accountKey"`
+	CustomerRefId    string `json:"customerRefId"`
+	Note             string `json:"note,omitempty"`
+	CustomerExt1     string `json:"customerExt1,omitempty"`
+	CustomerExt2     string `json:"customerExt2,omitempty"`
+	UseCustomNetwork bool   `json:"useCustomNetwork,omitempty"`
+	Transaction      struct {
 		To                   string `json:"to"`
 		Value                string `json:"value"`
 		ChainId              int64  `json:"chainId"`
