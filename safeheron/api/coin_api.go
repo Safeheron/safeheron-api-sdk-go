@@ -87,7 +87,7 @@ type CoinBlockHeightRequest struct {
 
 type CoinBlockHeightResponse []struct {
 	CoinKey          string `json:"coinKey"`
-	LocalBlockHeight string `json:"localBlockHeight"`
+	LocalBlockHeight int64  `json:"localBlockHeight"`
 }
 
 func (e *CoinApi) CoinBlockHeight(d CoinBlockHeightRequest, r *CoinBlockHeightResponse) error {
