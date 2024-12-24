@@ -119,7 +119,7 @@ type BatchUpdateAccountTagRequest struct {
 	AccountTag     string   `json:"accountTag"`
 }
 
-func (e *AccountApi) batchUpdateAccountTag(d BatchUpdateAccountTagRequest, r *ResultResponse) error {
+func (e *AccountApi) BatchUpdateAccountTag(d BatchUpdateAccountTagRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/account/batch/update/tag")
 }
 
