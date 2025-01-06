@@ -12,6 +12,8 @@ type CreateWhitelistRequest struct {
 	WhitelistName string `json:"whitelistName,omitempty"`
 	ChainType     string `json:"chainType,omitempty"`
 	Address       string `json:"address,omitempty"`
+	Memo          string `json:"memo,omitempty"`
+	HiddenOnUI    bool   `json:"hiddenOnUI,omitempty"`
 }
 
 type CreateWhitelistResponse struct {
@@ -20,6 +22,18 @@ type CreateWhitelistResponse struct {
 
 func (e *MpcSignApi) CreateWhitelist(d CreateWhitelistRequest, r *CreateWhitelistResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/create")
+}
+
+type CreateFromTransactionWhitelistRequest struct {
+	WhitelistName      string `json:"whitelistName,omitempty"`
+	TxKey              string `json:"txKey,omitempty"`
+	DestinationAddress string `json:"destinationAddress,omitempty"`
+	Memo               string `json:"memo,omitempty"`
+	HiddenOnUI         bool   `json:"hiddenOnUI,omitempty"`
+}
+
+func (e *MpcSignApi) CreateFromTransactionWhitelist(d CreateFromTransactionWhitelistRequest, r *CreateWhitelistResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/whitelist/createFromTransaction")
 }
 
 type OneWhitelistRequest struct {
@@ -31,6 +45,8 @@ type WhitelistResponse struct {
 	WhitelistKey    string `json:"whitelistKey,omitempty"`
 	ChainType       string `json:"chainType,omitempty"`
 	WhitelistName   string `json:"whitelistName,omitempty"`
+	Address         string `json:"address,omitempty"`
+	Memo            string `json:"memo,omitempty"`
 	WhitelistStatus string `json:"whitelistStatus,omitempty"`
 	CreateTime      int64  `json:"createTime,omitempty"`
 	LastUpdateTime  int64  `json:"lastUpdateTime,omitempty"`
@@ -58,6 +74,7 @@ type EditWhitelistRequest struct {
 	WhitelistKey  string `json:"whitelistKey,omitempty"`
 	WhitelistName string `json:"whitelistName,omitempty"`
 	Address       string `json:"address,omitempty"`
+	Memo          string `json:"memo,omitempty"`
 	Force         bool   `json:"force,omitempty"`
 }
 
