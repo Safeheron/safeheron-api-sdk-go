@@ -20,6 +20,7 @@ type TransactionsRequest struct {
 	DestinationAccountKey      string               `json:"destinationAccountKey"`
 	DestinationAccountType     string               `json:"destinationAccountType"`
 	DestinationAddress         string               `json:"destinationAddress"`
+	Memo                       string               `json:"memo"`
 	DestinationAddressList     []DestinationAddress `json:"destinationAddressList"`
 	DestinationTag             string               `json:"destinationTag"`
 	TransactionType            string               `json:"transactionType"`
@@ -130,6 +131,7 @@ type CreateTransactionsRequest struct {
 	DestinationAccountKey  string     `json:"destinationAccountKey,omitempty"`
 	DestinationAccountType string     `json:"destinationAccountType"`
 	DestinationAddress     string     `json:"destinationAddress,omitempty"`
+	Memo                   string     `json:"memo,omitempty"`
 	DestinationTag         string     `json:"destinationTag,omitempty"`
 	IsRbf                  *bool      `json:"isRbf,omitempty"`
 	FailOnContract         *bool      `json:"failOnContract,omitempty"`
@@ -181,6 +183,7 @@ type SourceAddress struct {
 
 type DestinationAddress struct {
 	Address         string `json:"address"`
+	Memo            string `json:"memo"`
 	Amount          string `json:"amount"`
 	AddressGroupKey string `json:"addressGroupKey"`
 }
@@ -218,6 +221,7 @@ type OneTransactionsResponse struct {
 	DestinationAccountKey      string                `json:"destinationAccountKey"`
 	DestinationAccountType     string                `json:"destinationAccountType"`
 	DestinationAddress         string                `json:"destinationAddress"`
+	Memo                       string                `json:"memo"`
 	DestinationAddressList     []DestinationAddress  `json:"destinationAddressList"`
 	DestinationTag             string                `json:"destinationTag"`
 	TransactionType            string                `json:"transactionType"`
