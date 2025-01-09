@@ -84,7 +84,7 @@ func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountRespo
 
 type BatchCreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
-	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
+	HiddenOnUI  *bool  `json:"hiddenOnUI,omitempty"`
 	Count       int32  `json:"count"`
 	AccountTag  string `json:"accountTag,omitempty"`
 }
@@ -103,7 +103,7 @@ func (e *AccountApi) BatchCreateAccountV2(d BatchCreateAccountRequest, r *[]Crea
 
 type UpdateAccountShowStateRequest struct {
 	AccountKey string `json:"accountKey"`
-	HiddenOnUI bool   `json:"hiddenOnUI"`
+	HiddenOnUI *bool  `json:"hiddenOnUI"`
 }
 
 type ResultResponse struct {
