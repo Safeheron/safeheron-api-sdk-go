@@ -16,10 +16,12 @@ type TransactionsRequest struct {
 	SourceAccountKey           string               `json:"sourceAccountKey"`
 	SourceAccountType          string               `json:"sourceAccountType"`
 	SourceAddress              string               `json:"sourceAddress"`
+	IsSourcePhishing           bool                 `json:"isSourcePhishing"`
 	SourceAddressList          []SourceAddress      `json:"sourceAddressList"`
 	DestinationAccountKey      string               `json:"destinationAccountKey"`
 	DestinationAccountType     string               `json:"destinationAccountType"`
 	DestinationAddress         string               `json:"destinationAddress"`
+	IsDestinationPhishing      bool                 `json:"isDestinationPhishing"`
 	Memo                       string               `json:"memo"`
 	DestinationAddressList     []DestinationAddress `json:"destinationAddressList"`
 	DestinationTag             string               `json:"destinationTag"`
@@ -177,15 +179,17 @@ type CreateTransactionsUTXOMultiDestRequest struct {
 }
 
 type SourceAddress struct {
-	Address         string `json:"address"`
-	AddressGroupKey string `json:"addressGroupKey"`
+	Address          string `json:"address"`
+	IsSourcePhishing bool   `json:"isSourcePhishing"`
+	AddressGroupKey  string `json:"addressGroupKey"`
 }
 
 type DestinationAddress struct {
-	Address         string `json:"address"`
-	Memo            string `json:"memo"`
-	Amount          string `json:"amount"`
-	AddressGroupKey string `json:"addressGroupKey"`
+	Address               string `json:"address"`
+	IsDestinationPhishing bool   `json:"isDestinationPhishing"`
+	Memo                  string `json:"memo"`
+	Amount                string `json:"amount"`
+	AddressGroupKey       string `json:"addressGroupKey"`
 }
 
 func (e *TransactionApi) CreateTransactionsUTXOMultiDest(d CreateTransactionsUTXOMultiDestRequest, r *TxKeyResult) error {
@@ -217,10 +221,12 @@ type OneTransactionsResponse struct {
 	SourceAccountKey           string                `json:"sourceAccountKey"`
 	SourceAccountType          string                `json:"sourceAccountType"`
 	SourceAddress              string                `json:"sourceAddress"`
+	IsSourcePhishing           bool                  `json:"isSourcePhishing"`
 	SourceAddressList          []SourceAddress       `json:"sourceAddressList"`
 	DestinationAccountKey      string                `json:"destinationAccountKey"`
 	DestinationAccountType     string                `json:"destinationAccountType"`
 	DestinationAddress         string                `json:"destinationAddress"`
+	IsDestinationPhishing      bool                  `json:"isDestinationPhishing"`
 	Memo                       string                `json:"memo"`
 	DestinationAddressList     []DestinationAddress  `json:"destinationAddressList"`
 	DestinationTag             string                `json:"destinationTag"`
@@ -255,6 +261,58 @@ type OneTransactionsResponse struct {
 
 func (e *TransactionApi) OneTransactions(d OneTransactionsRequest, r *OneTransactionsResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/transactions/one")
+}
+
+type ApprovalDetailTransactionsRequest struct {
+	TxKeyList []string `json:"txKeyList,omitempty"`
+}
+
+type ApprovalDetailTransactionsResponse struct {
+	ApprovalDetailList []ApprovalDetail `json:"approvalDetailList"`
+}
+
+type ApprovalDetail struct {
+	TxKey            string           `json:"txKey"`
+	ApprovalStatus   string           `json:"approvalStatus"`
+	PolicyName       string           `json:"policyName"`
+	ApprovalProgress ApprovalProgress `json:"approvalProgress"`
+}
+
+type ApprovalProgress struct {
+	RecipientApproval RecipientApproval `json:"recipientApproval"`
+	TeamApproval      []TeamApproval    `json:"teamApproval"`
+}
+
+type RecipientApproval struct {
+	ConnectId      string `json:"connectId"`
+	Name           string `json:"name"`
+	ApprovalStatus string `json:"approvalStatus"`
+}
+
+type TeamApproval struct {
+	Type          string         `json:"type"`
+	LimitBy       string         `json:"limitBy"`
+	Range         []string       `json:"range"`
+	TimePeriod    int32          `json:"timePeriod"`
+	ApprovalNodes []ApprovalNode `json:"approvalNodes"`
+}
+
+type ApprovalNode struct {
+	Threshold      int32    `json:"threshold"`
+	Name           string   `json:"name"`
+	ApprovalStatus string   `json:"approvalStatus"`
+	Members        []Member `json:"members"`
+}
+
+type Member struct {
+	AuditUserKey   string `json:"auditUserKey"`
+	AuditUserName  string `json:"auditUserName"`
+	IsCoSigner     bool   `json:"isCoSigner"`
+	ApprovalStatus string `json:"approvalStatus"`
+}
+
+func (e *TransactionApi) ApprovalDetailTransactions(d ApprovalDetailTransactionsRequest, r *ApprovalDetailTransactionsResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/transactions/approvalDetail")
 }
 
 type TransactionsFeeRateRequest struct {
