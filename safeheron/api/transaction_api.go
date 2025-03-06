@@ -162,6 +162,16 @@ func (e *TransactionApi) CreateTransactions(d CreateTransactionsRequest, r *TxKe
 	return e.Client.SendRequest(d, r, "/v2/transactions/create")
 }
 
+type CreateTransactionV3Response struct {
+	TxKey             string `json:"txKey"`
+	CustomerRefId     string `json:"customerRefId"`
+	IdempotentRequest bool   `json:"idempotentRequest"`
+}
+
+func (e *TransactionApi) CreateTransactionsV3(d CreateTransactionsRequest, r *CreateTransactionV3Response) error {
+	return e.Client.SendRequest(d, r, "/v3/transactions/create")
+}
+
 type CreateTransactionsUTXOMultiDestRequest struct {
 	CustomerRefId          string               `json:"customerRefId"`
 	CustomerExt1           string               `json:"customerExt1,omitempty"`
