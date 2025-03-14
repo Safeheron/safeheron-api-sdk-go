@@ -31,6 +31,13 @@ type CoSignerCallBack struct {
 	AesType    string `json:"aesType"`
 }
 
+type CoSignerCallBackV3 struct {
+	Timestamp  string `json:"timestamp"`
+	Sig        string `json:"sig"`
+	Version    string `json:"version"`
+	BizContent string `json:"bizContent"`
+}
+
 func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 	responseStringMap := map[string]string{
 		"key":        d.Key,
@@ -59,6 +66,21 @@ func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 	} else {
 		callBackContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
 	}
+	return string(callBackContent), nil
+}
+
+func (c *CoSignerConverter) RequestV3Convert(d CoSignerCallBackV3) (string, error) {
+	responseStringMap := map[string]string{
+		"version":    d.Version,
+		"timestamp":  d.Timestamp,
+		"bizContent": d.BizContent,
+	}
+	// Verify sign
+	verifyRet := utils.VerifySignWithRSAPSS(serializeParams(responseStringMap), d.Sig, c.Config.ApiPubKey)
+	if !verifyRet {
+		return "", errors.New("CoSignerCallBack signature verification failed")
+	}
+	callBackContent, _ := base64.StdEncoding.DecodeString(d.BizContent)
 	return string(callBackContent), nil
 }
 

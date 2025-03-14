@@ -114,6 +114,22 @@ func VerifySignWithRSA(data string, base64Sign string, rasPublicKeyPath string) 
 	return err == nil
 }
 
+func VerifySignWithRSAPSS(data string, base64Sign string, rasPublicKeyPath string) bool {
+	sign, err := base64.StdEncoding.DecodeString(base64Sign)
+	if err != nil {
+		return false
+	}
+
+	publicKey, err := loadPublicKeyFromPath(rasPublicKeyPath)
+	if err != nil {
+		return false
+	}
+
+	hashed := sha256.Sum256([]byte(data))
+	err = rsa.VerifyPSS(publicKey, crypto.SHA256, hashed[:], sign, nil)
+	return err == nil
+}
+
 func loadPublicKeyFromPath(path string) (*rsa.PublicKey, error) {
 	var err error
 	readFile, err := os.ReadFile(path)
