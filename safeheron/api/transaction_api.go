@@ -36,6 +36,9 @@ type TransactionsRequest struct {
 	FeeCoinKey                 string               `json:"feeCoinKey"`
 	ReplaceTxHash              string               `json:"replaceTxHash"`
 	CustomerRefId              string               `json:"customerRefId"`
+	Nonce                      string               `json:"nonce"`
+	ReplacedTxKey              string               `json:"replacedTxKey"`
+	ReplacedCustomerRefId      string               `json:"replacedCustomerRefId"`
 	CustomerExt1               string               `json:"customerExt1"`
 	CustomerExt2               string               `json:"customerExt2"`
 	AmlLock                    string               `json:"amlLock"`
@@ -251,6 +254,9 @@ type OneTransactionsResponse struct {
 	FeeCoinKey                 string                `json:"feeCoinKey"`
 	ReplaceTxHash              string                `json:"replaceTxHash"`
 	CustomerRefId              string                `json:"customerRefId"`
+	Nonce                      string                `json:"nonce"`
+	ReplacedTxKey              string                `json:"replacedTxKey"`
+	ReplacedCustomerRefId      string                `json:"replacedCustomerRefId"`
 	CustomerExt1               string                `json:"customerExt1"`
 	CustomerExt2               string                `json:"customerExt2"`
 	AmlLock                    string                `json:"amlLock"`

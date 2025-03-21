@@ -89,6 +89,11 @@ type CoSignerResponse struct {
 	TxKey   string `json:"txKey"`
 }
 
+type CoSignerResponseV3 struct {
+	Action     string `json:"action"`
+	ApprovalId string `json:"approvalId"`
+}
+
 // It has been Deprecated,Please use convertCoSignerResponseWithNewCryptoType
 func (c *CoSignerConverter) ResponseConverter(d any) (map[string]string, error) {
 	// Use AES to encrypt request data
@@ -165,6 +170,28 @@ func (c *CoSignerConverter) ResponseConverterWithNewCryptoType(d any) (map[strin
 	params["sig"] = signature
 	params["rsaType"] = utils.ECB_OAEP
 	params["aesType"] = utils.GCM
+	return params, nil
+}
+
+func (c *CoSignerConverter) ResponseV3Converter(d any) (map[string]string, error) {
+	// Create params map
+	params := map[string]string{
+		"timestamp": strconv.FormatInt(time.Now().UnixMilli(), 10),
+		"code":      "200",
+		"version":   "v3",
+		"message":   "SUCCESS",
+	}
+	if d != nil {
+		payLoad, _ := json.Marshal(d)
+		params["bizContent"] = base64.StdEncoding.EncodeToString(payLoad)
+	}
+
+	// Sign the request data with your RSA private key
+	signature, err := utils.SignParamsWithRSAPSS(serializeParams(params), c.Config.BizPrivKey)
+	if err != nil {
+		return nil, err
+	}
+	params["sig"] = signature
 	return params, nil
 }
 
