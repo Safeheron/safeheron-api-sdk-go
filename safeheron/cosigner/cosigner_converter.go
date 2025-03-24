@@ -18,8 +18,8 @@ type CoSignerConverter struct {
 }
 
 type CoSignerConfig struct {
-	ApiPubKey  string `comment:"apiPubKey"`
-	BizPrivKey string `comment:"bizPrivKey"`
+	CoSignerPubKey                    string `comment:"coSignerPubKey"`
+	ApprovalCallbackServicePrivateKey string `comment:"approvalCallbackServicePrivateKey"`
 }
 
 type CoSignerCallBack struct {
@@ -45,16 +45,16 @@ func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 		"bizContent": d.BizContent,
 	}
 	// Verify sign
-	verifyRet := utils.VerifySignWithRSA(serializeParams(responseStringMap), d.Sig, c.Config.ApiPubKey)
+	verifyRet := utils.VerifySignWithRSA(serializeParams(responseStringMap), d.Sig, c.Config.CoSignerPubKey)
 	if !verifyRet {
 		return "", errors.New("CoSignerCallBack signature verification failed")
 	}
 	// Use your RSA private key to decrypt response's aesKey and aesIv
 	var plaintext []byte
 	if d.RsaType == utils.ECB_OAEP {
-		plaintext, _ = utils.DecryptWithOAEP(d.Key, c.Config.BizPrivKey)
+		plaintext, _ = utils.DecryptWithOAEP(d.Key, c.Config.ApprovalCallbackServicePrivateKey)
 	} else {
-		plaintext, _ = utils.DecryptWithRSA(d.Key, c.Config.BizPrivKey)
+		plaintext, _ = utils.DecryptWithRSA(d.Key, c.Config.ApprovalCallbackServicePrivateKey)
 	}
 	resAesKey := plaintext[:32]
 	resAesIv := plaintext[32:]
@@ -76,7 +76,7 @@ func (c *CoSignerConverter) RequestV3Convert(d CoSignerCallBackV3) (string, erro
 		"bizContent": d.BizContent,
 	}
 	// Verify sign
-	verifyRet := utils.VerifySignWithRSAPSS(serializeParams(responseStringMap), d.Sig, c.Config.ApiPubKey)
+	verifyRet := utils.VerifySignWithRSAPSS(serializeParams(responseStringMap), d.Sig, c.Config.CoSignerPubKey)
 	if !verifyRet {
 		return "", errors.New("CoSignerCallBack signature verification failed")
 	}
@@ -118,14 +118,14 @@ func (c *CoSignerConverter) ResponseConverter(d any) (map[string]string, error) 
 	}
 
 	// Use Safeheron RSA public key to encrypt request's aesKey and aesIv
-	encryptedKeyAndIv, err := utils.EncryptWithRSA(append(aesKey, aesIv...), c.Config.ApiPubKey)
+	encryptedKeyAndIv, err := utils.EncryptWithRSA(append(aesKey, aesIv...), c.Config.CoSignerPubKey)
 	if err != nil {
 		return nil, err
 	}
 	params["key"] = encryptedKeyAndIv
 
 	// Sign the request data with your RSA private key
-	signature, err := utils.SignParamsWithRSA(serializeParams(params), c.Config.BizPrivKey)
+	signature, err := utils.SignParamsWithRSA(serializeParams(params), c.Config.ApprovalCallbackServicePrivateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -156,14 +156,14 @@ func (c *CoSignerConverter) ResponseConverterWithNewCryptoType(d any) (map[strin
 	}
 
 	// Use Safeheron RSA public key to encrypt request's aesKey and aesIv
-	encryptedKeyAndIv, err := utils.EncryptWithOAEP(append(aesKey, aesIv...), c.Config.ApiPubKey)
+	encryptedKeyAndIv, err := utils.EncryptWithOAEP(append(aesKey, aesIv...), c.Config.CoSignerPubKey)
 	if err != nil {
 		return nil, err
 	}
 	params["key"] = encryptedKeyAndIv
 
 	// Sign the request data with your RSA private key
-	signature, err := utils.SignParamsWithRSA(serializeParams(params), c.Config.BizPrivKey)
+	signature, err := utils.SignParamsWithRSA(serializeParams(params), c.Config.ApprovalCallbackServicePrivateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -186,8 +186,8 @@ func (c *CoSignerConverter) ResponseV3Converter(d any) (map[string]string, error
 		params["bizContent"] = base64.StdEncoding.EncodeToString(payLoad)
 	}
 
-	// Sign the request data with your RSA private key
-	signature, err := utils.SignParamsWithRSAPSS(serializeParams(params), c.Config.BizPrivKey)
+	// Sign the request data with your Approval Callback Service's private Key
+	signature, err := utils.SignParamsWithRSAPSS(serializeParams(params), c.Config.ApprovalCallbackServicePrivateKey)
 	if err != nil {
 		return nil, err
 	}
