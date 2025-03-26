@@ -32,6 +32,24 @@ func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
 	return b64sig, err
 }
 
+func SignParamsWithRSAPSS(data string, privateKeyPath string) (string, error) {
+	// Sign data with your RSA private key
+	privateKey, err := loadPrivateKeyFromPath(privateKeyPath)
+	if err != nil {
+		return "", err
+	}
+	hashed := sha256.Sum256([]byte(data))
+
+	signature, err := rsa.SignPSS(rand.Reader, privateKey, crypto.SHA256, hashed[:], &rsa.PSSOptions{SaltLength: rsa.PSSSaltLengthEqualsHash, Hash: crypto.SHA256})
+
+	if err != nil {
+		return "", err
+	}
+	// Encode to base64 format
+	b64sig := base64.StdEncoding.EncodeToString(signature)
+	return b64sig, err
+}
+
 func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
 	privateKey, err := loadPrivateKeyFromPath(privateKeyPath)
 	if err != nil {
@@ -111,6 +129,22 @@ func VerifySignWithRSA(data string, base64Sign string, rasPublicKeyPath string) 
 
 	hashed := sha256.Sum256([]byte(data))
 	err = rsa.VerifyPKCS1v15(publicKey, crypto.SHA256, hashed[:], sign)
+	return err == nil
+}
+
+func VerifySignWithRSAPSS(data string, base64Sign string, rasPublicKeyPath string) bool {
+	sign, err := base64.StdEncoding.DecodeString(base64Sign)
+	if err != nil {
+		return false
+	}
+
+	publicKey, err := loadPublicKeyFromPath(rasPublicKeyPath)
+	if err != nil {
+		return false
+	}
+
+	hashed := sha256.Sum256([]byte(data))
+	err = rsa.VerifyPSS(publicKey, crypto.SHA256, hashed[:], sign, &rsa.PSSOptions{SaltLength: rsa.PSSSaltLengthEqualsHash, Hash: crypto.SHA256})
 	return err == nil
 }
 
