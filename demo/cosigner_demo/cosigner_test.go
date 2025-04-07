@@ -31,15 +31,17 @@ func teardown() {
 
 func TestConvert(t *testing.T) {
 	//The CoSignerCallBack received by the controller
+	//Visit the following link to view the request data specification：https://docs.safeheron.com/api/en.html#API%20Co-Signer%20Request%20Data
 	var coSignerCallBack cosigner.CoSignerCallBackV3
 	coSignerBizContent, _ := coSignerConverter.RequestV3Convert(coSignerCallBack)
 	//According to different types of CoSignerCallBack, the customer handles the corresponding type of business logic.
 	log.Infof("coSignerBizContent: %s", coSignerBizContent)
 
+	//Visit the following link to view the response data specification.：https://docs.safeheron.com/api/en.html#Approval%20Callback%20Service%20Response%20Data
 	var coSignerResponse cosigner.CoSignerResponseV3
 	//coSignerBizContent.ApprovalId
-	coSignerResponse.ApprovalId = "approvalId"
-	coSignerResponse.Action = "APPROVE"
+	coSignerResponse.ApprovalId = "<Replace with the approvalId data from the request>"
+	coSignerResponse.Action = "<Replace with APPROVE or REJECT>"
 	encryptResponse, _ := coSignerConverter.ResponseV3Converter(coSignerResponse)
 	log.Infof("encryptResponse: %s", encryptResponse)
 	//The customer returns encryptResponse after processing the business logic.
