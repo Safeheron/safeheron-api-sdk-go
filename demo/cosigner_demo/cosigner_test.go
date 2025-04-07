@@ -20,8 +20,8 @@ func setup() {
 	}
 
 	coSignerConverter = cosigner.CoSignerConverter{Config: cosigner.CoSignerConfig{
-		ApiPubKey:  viper.GetString("apiPubKey"),
-		BizPrivKey: viper.GetString("bizPrivKey"),
+		CoSignerPubKey:                    viper.GetString("coSignerPubKey"),
+		ApprovalCallbackServicePrivateKey: viper.GetString("approvalCallbackServicePrivateKey"),
 	}}
 
 }
