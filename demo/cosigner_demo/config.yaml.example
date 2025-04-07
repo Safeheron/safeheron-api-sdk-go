@@ -1,4 +1,4 @@
-# RSA private key (biz_privkey) is configured in the audit service.
+# The private key used by the Approval Callback Service must be the private key that corresponds to the public key uploaded when creating the API Key.
 approvalCallbackServicePrivateKey: /path/to/your/privatekey.pem
-# RSA public key (api_pubkey) is used in the API Key configuration on Safeheron Web Console.
+# Use the export-public-key command of the API Co-Signer CLI to export the API Co-Signer's public key.
 coSignerPubKey: /path/to/your/publickey.pem
