@@ -31,15 +31,16 @@ func teardown() {
 
 func TestConvert(t *testing.T) {
 	//The CoSignerCallBack received by the controller
-	var coSignerCallBack cosigner.CoSignerCallBack
-	coSignerBizContent, _ := coSignerConverter.RequestConvert(coSignerCallBack)
+	var coSignerCallBack cosigner.CoSignerCallBackV3
+	coSignerBizContent, _ := coSignerConverter.RequestV3Convert(coSignerCallBack)
 	//According to different types of CoSignerCallBack, the customer handles the corresponding type of business logic.
 	log.Infof("coSignerBizContent: %s", coSignerBizContent)
 
-	var coSignerResponse cosigner.CoSignerResponse
-	coSignerResponse.Approve = true
-	coSignerResponse.TxKey = ""
-	encryptResponse, _ := coSignerConverter.ResponseConverterWithNewCryptoType(coSignerResponse)
+	var coSignerResponse cosigner.CoSignerResponseV3
+	//coSignerBizContent.ApprovalId
+	coSignerResponse.ApprovalId = "approvalId"
+	coSignerResponse.Action = "APPROVE"
+	encryptResponse, _ := coSignerConverter.ResponseV3Converter(coSignerResponse)
 	log.Infof("encryptResponse: %s", encryptResponse)
 	//The customer returns encryptResponse after processing the business logic.
 }
