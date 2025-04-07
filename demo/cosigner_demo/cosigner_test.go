@@ -20,8 +20,8 @@ func setup() {
 	}
 
 	coSignerConverter = cosigner.CoSignerConverter{Config: cosigner.CoSignerConfig{
-		ApiPubKey:  viper.GetString("apiPubKey"),
-		BizPrivKey: viper.GetString("bizPrivKey"),
+		CoSignerPubKey:                    viper.GetString("coSignerPubKey"),
+		ApprovalCallbackServicePrivateKey: viper.GetString("approvalCallbackServicePrivateKey"),
 	}}
 
 }
@@ -31,15 +31,18 @@ func teardown() {
 
 func TestConvert(t *testing.T) {
 	//The CoSignerCallBack received by the controller
-	var coSignerCallBack cosigner.CoSignerCallBack
-	coSignerBizContent, _ := coSignerConverter.RequestConvert(coSignerCallBack)
+	//Visit the following link to view the request data specification：https://docs.safeheron.com/api/en.html#API%20Co-Signer%20Request%20Data
+	var coSignerCallBack cosigner.CoSignerCallBackV3
+	coSignerBizContent, _ := coSignerConverter.RequestV3Convert(coSignerCallBack)
 	//According to different types of CoSignerCallBack, the customer handles the corresponding type of business logic.
 	log.Infof("coSignerBizContent: %s", coSignerBizContent)
 
-	var coSignerResponse cosigner.CoSignerResponse
-	coSignerResponse.Approve = true
-	coSignerResponse.TxKey = ""
-	encryptResponse, _ := coSignerConverter.ResponseConverterWithNewCryptoType(coSignerResponse)
+	//Visit the following link to view the response data specification.：https://docs.safeheron.com/api/en.html#Approval%20Callback%20Service%20Response%20Data
+	var coSignerResponse cosigner.CoSignerResponseV3
+	//coSignerBizContent.ApprovalId
+	coSignerResponse.ApprovalId = "<Replace with the approvalId data from the request>"
+	coSignerResponse.Action = "<Replace with APPROVE or REJECT>"
+	encryptResponse, _ := coSignerConverter.ResponseV3Converter(coSignerResponse)
 	log.Infof("encryptResponse: %s", encryptResponse)
 	//The customer returns encryptResponse after processing the business logic.
 }
