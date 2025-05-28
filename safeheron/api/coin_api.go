@@ -72,7 +72,7 @@ type CoinBalanceSnapshotRequest struct {
 	Gmt8Date string `json:"gmt8Date"`
 }
 
-type CoinBalanceSnapshotResponse struct {
+type CoinBalanceSnapshotResponse []struct {
 	CoinKey     string `json:"coinKey"`
 	CoinBalance string `json:"coinBalance"`
 }

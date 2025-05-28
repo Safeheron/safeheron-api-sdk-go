@@ -20,7 +20,7 @@ type CreateWhitelistResponse struct {
 	WhitelistKey string `json:"whitelistKey"`
 }
 
-func (e *MpcSignApi) CreateWhitelist(d CreateWhitelistRequest, r *CreateWhitelistResponse) error {
+func (e *WhitelistApi) CreateWhitelist(d CreateWhitelistRequest, r *CreateWhitelistResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/create")
 }
 
@@ -32,7 +32,7 @@ type CreateFromTransactionWhitelistRequest struct {
 	HiddenOnUI         bool   `json:"hiddenOnUI,omitempty"`
 }
 
-func (e *MpcSignApi) CreateFromTransactionWhitelist(d CreateFromTransactionWhitelistRequest, r *CreateWhitelistResponse) error {
+func (e *WhitelistApi) CreateFromTransactionWhitelist(d CreateFromTransactionWhitelistRequest, r *CreateWhitelistResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/createFromTransaction")
 }
 
@@ -52,7 +52,7 @@ type WhitelistResponse struct {
 	LastUpdateTime  int64  `json:"lastUpdateTime,omitempty"`
 }
 
-func (e *MpcSignApi) OneWhitelist(d OneWhitelistRequest, r *WhitelistResponse) error {
+func (e *WhitelistApi) OneWhitelist(d OneWhitelistRequest, r *WhitelistResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/one")
 }
 
@@ -66,7 +66,7 @@ type ListWhitelistRequest struct {
 	CreateTimeMax   int64  `json:"createTimeMax,omitempty"`
 }
 
-func (e *MpcSignApi) ListWhitelist(d ListWhitelistRequest, r *[]WhitelistResponse) error {
+func (e *WhitelistApi) ListWhitelist(d ListWhitelistRequest, r *[]WhitelistResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/list")
 }
 
@@ -78,7 +78,7 @@ type EditWhitelistRequest struct {
 	Force         bool   `json:"force,omitempty"`
 }
 
-func (e *MpcSignApi) EditWhitelist(d EditWhitelistRequest, r *ResultResponse) error {
+func (e *WhitelistApi) EditWhitelist(d EditWhitelistRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/edit")
 }
 
@@ -86,6 +86,6 @@ type DeleteWhitelistRequest struct {
 	WhitelistKey string `json:"whitelistKey,omitempty"`
 }
 
-func (e *MpcSignApi) DeleteWhitelist(d DeleteWhitelistRequest, r *ResultResponse) error {
+func (e *WhitelistApi) DeleteWhitelist(d DeleteWhitelistRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/whitelist/delete")
 }
