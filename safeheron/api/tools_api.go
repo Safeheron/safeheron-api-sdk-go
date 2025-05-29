@@ -17,7 +17,7 @@ type AmlCheckerRequestResponse struct {
 	RequestId string `json:"requestId"`
 }
 
-func (e *ToolsApi) CmlCheckerRequest(d CreateWhitelistRequest, r *CreateWhitelistResponse) error {
+func (e *ToolsApi) AmlCheckerRequest(d AmlCheckerRequestRequest, r *AmlCheckerRequestResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/tools/aml-checker/request")
 }
 
@@ -48,9 +48,9 @@ type RiskDetail struct {
 	Label   string `json:"label"`
 	Address string `json:"address"`
 	Volume  string `json:"volume"`
-	Percent bool   `json:"percent"`
+	Percent string `json:"percent"`
 }
 
-func (e *ToolsApi) CreateFromTransactionWhitelist(d CreateFromTransactionWhitelistRequest, r *CreateWhitelistResponse) error {
+func (e *ToolsApi) AmlCheckerRetrieves(d AmlCheckerRetrievesRequest, r *AmlCheckerRetrievesResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/tools/aml-checker/retrieves")
 }
