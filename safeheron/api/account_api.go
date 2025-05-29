@@ -260,6 +260,21 @@ func (e *AccountApi) InfoAccountCoinAddress(d InfoAccountCoinAddressRequest, r *
 	return e.Client.SendRequest(d, r, "/v1/account/coin/address/info")
 }
 
+type AccountCoinBalanceRequest struct {
+	CoinKeyList []string `json:"coinKeyList"`
+}
+
+type AccountCoinBalanceResponse struct {
+	BalanceList []struct {
+		CoinKey string `json:"coinKey"`
+		Balance string `json:"balance"`
+	} `json:"balanceList"`
+}
+
+func (e *AccountApi) AccountCoinBalance(d AccountCoinBalanceRequest, r *AccountCoinBalanceResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/coin/balance")
+}
+
 type RenameAccountCoinAddressRequest struct {
 	AddressGroupKey  string `json:"addressGroupKey"`
 	AddressGroupName string `json:"addressGroupName"`

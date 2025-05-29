@@ -37,6 +37,7 @@ func (e *Web3Api) CreateWeb3Account(d CreateWeb3AccountRequest, r *CreateWeb3Acc
 type BatchCreateWeb3AccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
 	Count       int32  `json:"count"`
+	HiddenOnUI  bool   `json:"hiddenOnUI,omitempty"`
 }
 
 type BatchCreateWeb3AccountResponse []struct {

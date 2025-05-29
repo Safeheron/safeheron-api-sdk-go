@@ -13,7 +13,7 @@ type ResendWebhookRequest struct {
 	TxKey    string `json:"txKey,omitempty"`
 }
 
-func (e *MpcSignApi) ResendWebhook(d ResendWebhookRequest, r *ResultResponse) error {
+func (e *WebhookApi) ResendWebhook(d ResendWebhookRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/webhook/resend")
 }
 
@@ -26,6 +26,6 @@ type MessagesCountResponse struct {
 	MessagesCount int32 `json:"messagesCount"`
 }
 
-func (e *MpcSignApi) ResendFailed(d ResendFailedRequest, r *MessagesCountResponse) error {
+func (e *WebhookApi) ResendFailed(d ResendFailedRequest, r *MessagesCountResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/webhook/resend/failed")
 }
