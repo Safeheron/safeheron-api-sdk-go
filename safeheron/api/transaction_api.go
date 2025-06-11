@@ -140,6 +140,7 @@ type CreateTransactionsRequest struct {
 	DestinationTag         string     `json:"destinationTag,omitempty"`
 	IsRbf                  *bool      `json:"isRbf,omitempty"`
 	FailOnContract         *bool      `json:"failOnContract,omitempty"`
+	FailOnAml              *bool      `json:"failOnAml,omitempty"`
 	Nonce                  int64      `json:"nonce,omitempty"`
 	SequenceNumber         int64      `json:"sequenceNumber,omitempty"`
 	BalanceVerifyType      string     `json:"balanceVerifyType,omitempty"`
@@ -189,6 +190,7 @@ type CreateTransactionsUTXOMultiDestRequest struct {
 	DestinationAddressList []DestinationAddress `json:"destinationAddressList,omitempty"`
 	DestinationTag         string               `json:"destinationTag,omitempty"`
 	IsRbf                  bool                 `json:"isRbf,omitempty"`
+	FailOnAml              *bool                `json:"failOnAml,omitempty"`
 }
 
 type SourceAddress struct {
