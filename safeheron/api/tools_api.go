@@ -44,11 +44,12 @@ type MistTrack struct {
 }
 
 type RiskDetail struct {
-	Type    string `json:"type"`
-	Label   string `json:"label"`
-	Address string `json:"address"`
-	Volume  string `json:"volume"`
-	Percent string `json:"percent"`
+	RiskType     string `json:"riskType"`
+	Entity       string `json:"entity"`
+	HopNum       string `json:"hopNum"`
+	ExposureType string `json:"exposureType"`
+	Volume       string `json:"volume"`
+	Percent      string `json:"percent"`
 }
 
 func (e *ToolsApi) AmlCheckerRetrieves(d AmlCheckerRetrievesRequest, r *AmlCheckerRetrievesResponse) error {
