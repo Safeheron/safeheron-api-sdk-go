@@ -45,12 +45,9 @@ type TransactionsRequest struct {
 	BlockHeight                int64                `json:"blockHeight"`
 	CompletedTime              int64                `json:"completedTime"`
 	RealDestinationAccountType string               `json:"realDestinationAccountType"`
-	TransactionSubStatusDesc   string               `json:"transactionSubStatusDesc"`
 	TxAmountToUsd              string               `json:"txAmountToUsd"`
 	SourceAccountName          string               `json:"sourceAccountName"`
-	SourceAccountTypeName      string               `json:"sourceAccountTypeName"`
 	DestinationAccountName     string               `json:"destinationAccountName"`
-	DestinationAccountTypeName string               `json:"destinationAccountTypeName"`
 	AuditUserName              string               `json:"auditUserName"`
 	CreatedByUserName          string               `json:"createdByUserName"`
 	TransactionDirection       string               `json:"transactionDirection"`
@@ -98,6 +95,7 @@ type ListTransactionsV2Request struct {
 	SourceAccountType          string `json:"sourceAccountType,omitempty"`
 	DestinationAccountKey      string `json:"destinationAccountKey,omitempty"`
 	DestinationAccountType     string `json:"destinationAccountType,omitempty"`
+	AccountKey                 string `json:"accountKey,omitempty"`
 	CreateTimeMin              int64  `json:"createTimeMin,omitempty"`
 	CreateTimeMax              int64  `json:"createTimeMax,omitempty"`
 	TxAmountMin                string `json:"txAmountMin,omitempty"`
@@ -265,12 +263,9 @@ type OneTransactionsResponse struct {
 	BlockHeight                int64                 `json:"blockHeight"`
 	CompletedTime              int64                 `json:"completedTime"`
 	RealDestinationAccountType string                `json:"realDestinationAccountType"`
-	TransactionSubStatusDesc   string                `json:"transactionSubStatusDesc"`
 	TxAmountToUsd              string                `json:"txAmountToUsd"`
 	SourceAccountName          string                `json:"sourceAccountName"`
-	SourceAccountTypeName      string                `json:"sourceAccountTypeName"`
 	DestinationAccountName     string                `json:"destinationAccountName"`
-	DestinationAccountTypeName string                `json:"destinationAccountTypeName"`
 	AuditUserName              string                `json:"auditUserName"`
 	CreatedByUserName          string                `json:"createdByUserName"`
 	SpeedUpHistory             []TransactionsRequest `json:"speedUpHistory"`
