@@ -9,12 +9,18 @@ type GasApi struct {
 }
 
 type GasStatusResponse struct {
-	GasBalance []GasBalance `json:"gasBalance"`
+	GasBalance    []GasBalance    `json:"gasBalance"`
+	Configuration []Configuration `json:"configuration"`
 }
 
 type GasBalance struct {
 	Symbol string `json:"symbol"`
 	Amount string `json:"amount"`
+}
+
+type Configuration struct {
+	Symbol string `json:"network"`
+	Amount bool   `json:"enabled"`
 }
 
 func (e *GasApi) GasStatus(r *GasStatusResponse) error {

@@ -12,6 +12,8 @@ type ListAccountRequest struct {
 	PageNumber    int    `json:"pageNumber,omitempty"`
 	PageSize      int    `json:"pageSize,omitempty"`
 	HiddenOnUI    *bool  `json:"hiddenOnUI,omitempty"`
+	AutoFuel      *bool  `json:"autoFuel,omitempty"`
+	Archived      *bool  `json:"archived,omitempty"`
 	NamePrefix    string `json:"namePrefix,omitempty"`
 	NameSuffix    string `json:"nameSuffix,omitempty"`
 	CustomerRefId string `json:"customerRefId,omitempty"`
@@ -25,6 +27,8 @@ type AccountResponse struct {
 	AccountType   string `json:"accountType"`
 	AccountTag    string `json:"accountTag"`
 	HiddenOnUI    bool   `json:"hiddenOnUI"`
+	AutoFuel      bool   `json:"autoFuel"`
+	Archived      bool   `json:"archived"`
 	UsdBalance    string `json:"usdBalance"`
 	PubKeys       []struct {
 		SignAlg string `json:"signAlg"`
@@ -55,7 +59,8 @@ func (e *AccountApi) OneAccounts(d OneAccountRequest, r *AccountResponse) error 
 type CreateAccountRequest struct {
 	AccountName   string   `json:"accountName,omitempty"`
 	CustomerRefId string   `json:"customerRefId,omitempty"`
-	HiddenOnUI    bool     `json:"hiddenOnUI,omitempty"`
+	HiddenOnUI    *bool    `json:"hiddenOnUI,omitempty"`
+	AutoFuel      *bool    `json:"autoFuel,omitempty"`
 	AccountTag    string   `json:"accountTag,omitempty"`
 	CoinKeyList   []string `json:"coinKeyList,omitempty"`
 }
@@ -85,6 +90,7 @@ func (e *AccountApi) CreateAccount(d CreateAccountRequest, r *CreateAccountRespo
 type BatchCreateAccountRequest struct {
 	AccountName string `json:"accountName,omitempty"`
 	HiddenOnUI  *bool  `json:"hiddenOnUI,omitempty"`
+	AutoFuel    *bool  `json:"autoFuel,omitempty"`
 	Count       int32  `json:"count"`
 	AccountTag  string `json:"accountTag,omitempty"`
 }
@@ -121,6 +127,15 @@ type BatchUpdateAccountTagRequest struct {
 
 func (e *AccountApi) BatchUpdateAccountTag(d BatchUpdateAccountTagRequest, r *ResultResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/account/batch/update/tag")
+}
+
+type BatchUpdateAccountFuelRequest struct {
+	AccountKeyList []string `json:"accountKeyList"`
+	AutoFuel       *bool    `json:"autoFuel"`
+}
+
+func (e *AccountApi) BatchUpdateAccountAutofuel(d BatchUpdateAccountFuelRequest, r *ResultResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/batch/update/autofuel")
 }
 
 type AddCoinRequest struct {

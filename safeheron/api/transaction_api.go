@@ -8,7 +8,7 @@ type TransactionApi struct {
 	Client safeheron.Client
 }
 
-type TransactionsRequest struct {
+type TransactionsResponse struct {
 	TxKey                      string               `json:"txKey"`
 	TxHash                     string               `json:"txHash"`
 	CoinKey                    string               `json:"coinKey"`
@@ -34,6 +34,7 @@ type TransactionsRequest struct {
 	CreatedByUserKey           string               `json:"createdByUserKey"`
 	TxFee                      string               `json:"txFee"`
 	FeeCoinKey                 string               `json:"feeCoinKey"`
+	GasFee                     []GasFee             `json:"gasFee"`
 	ReplaceTxHash              string               `json:"replaceTxHash"`
 	CustomerRefId              string               `json:"customerRefId"`
 	Nonce                      string               `json:"nonce"`
@@ -77,10 +78,10 @@ type ListTransactionsV1Request struct {
 }
 
 type TransactionsResponseV1 struct {
-	PageNumber    int32                 `json:"pageNumber"`
-	PageSize      int32                 `json:"pageSize"`
-	TotalElements int64                 `json:"totalElements"`
-	Content       []TransactionsRequest `json:"content"`
+	PageNumber    int32                  `json:"pageNumber"`
+	PageSize      int32                  `json:"pageSize"`
+	TotalElements int64                  `json:"totalElements"`
+	Content       []TransactionsResponse `json:"content"`
 }
 
 func (e *TransactionApi) ListTransactionsV1(d ListTransactionsV1Request, r *TransactionsResponseV1) error {
@@ -112,7 +113,7 @@ type ListTransactionsV2Request struct {
 	TransactionDirection       string `json:"transactionDirection,omitempty"`
 }
 
-type TransactionsResponseV2 []TransactionsRequest
+type TransactionsResponseV2 []TransactionsResponse
 
 func (e *TransactionApi) ListTransactionsV2(d ListTransactionsV2Request, r *TransactionsResponseV2) error {
 	return e.Client.SendRequest(d, r, "/v2/transactions/list")
@@ -205,6 +206,11 @@ type DestinationAddress struct {
 	AddressGroupKey       string `json:"addressGroupKey"`
 }
 
+type GasFee struct {
+	Symbol string `json:"symbol"`
+	Amount string `json:"amount"`
+}
+
 func (e *TransactionApi) CreateTransactionsUTXOMultiDest(d CreateTransactionsUTXOMultiDestRequest, r *TxKeyResult) error {
 	return e.Client.SendRequest(d, r, "/v1/transactions/utxo/multidest/create")
 }
@@ -227,49 +233,50 @@ type OneTransactionsRequest struct {
 }
 
 type OneTransactionsResponse struct {
-	TxKey                      string                `json:"txKey"`
-	TxHash                     string                `json:"txHash"`
-	CoinKey                    string                `json:"coinKey"`
-	TxAmount                   string                `json:"txAmount"`
-	SourceAccountKey           string                `json:"sourceAccountKey"`
-	SourceAccountType          string                `json:"sourceAccountType"`
-	SourceAddress              string                `json:"sourceAddress"`
-	IsSourcePhishing           bool                  `json:"isSourcePhishing"`
-	SourceAddressList          []SourceAddress       `json:"sourceAddressList"`
-	DestinationAccountKey      string                `json:"destinationAccountKey"`
-	DestinationAccountType     string                `json:"destinationAccountType"`
-	DestinationAddress         string                `json:"destinationAddress"`
-	IsDestinationPhishing      bool                  `json:"isDestinationPhishing"`
-	Memo                       string                `json:"memo"`
-	DestinationAddressList     []DestinationAddress  `json:"destinationAddressList"`
-	DestinationTag             string                `json:"destinationTag"`
-	TransactionType            string                `json:"transactionType"`
-	TransactionStatus          string                `json:"transactionStatus"`
-	TransactionSubStatus       string                `json:"transactionSubStatus"`
-	CreateTime                 int64                 `json:"createTime"`
-	Note                       string                `json:"note"`
-	AuditUserKey               string                `json:"auditUserKey"`
-	CreatedByUserKey           string                `json:"createdByUserKey"`
-	TxFee                      string                `json:"txFee"`
-	FeeCoinKey                 string                `json:"feeCoinKey"`
-	ReplaceTxHash              string                `json:"replaceTxHash"`
-	CustomerRefId              string                `json:"customerRefId"`
-	Nonce                      string                `json:"nonce"`
-	ReplacedTxKey              string                `json:"replacedTxKey"`
-	ReplacedCustomerRefId      string                `json:"replacedCustomerRefId"`
-	CustomerExt1               string                `json:"customerExt1"`
-	CustomerExt2               string                `json:"customerExt2"`
-	AmlLock                    string                `json:"amlLock"`
-	BlockHeight                int64                 `json:"blockHeight"`
-	CompletedTime              int64                 `json:"completedTime"`
-	RealDestinationAccountType string                `json:"realDestinationAccountType"`
-	TxAmountToUsd              string                `json:"txAmountToUsd"`
-	SourceAccountName          string                `json:"sourceAccountName"`
-	DestinationAccountName     string                `json:"destinationAccountName"`
-	AuditUserName              string                `json:"auditUserName"`
-	CreatedByUserName          string                `json:"createdByUserName"`
-	SpeedUpHistory             []TransactionsRequest `json:"speedUpHistory"`
-	TransactionDirection       string                `json:"transactionDirection"`
+	TxKey                      string                 `json:"txKey"`
+	TxHash                     string                 `json:"txHash"`
+	CoinKey                    string                 `json:"coinKey"`
+	TxAmount                   string                 `json:"txAmount"`
+	SourceAccountKey           string                 `json:"sourceAccountKey"`
+	SourceAccountType          string                 `json:"sourceAccountType"`
+	SourceAddress              string                 `json:"sourceAddress"`
+	IsSourcePhishing           bool                   `json:"isSourcePhishing"`
+	SourceAddressList          []SourceAddress        `json:"sourceAddressList"`
+	DestinationAccountKey      string                 `json:"destinationAccountKey"`
+	DestinationAccountType     string                 `json:"destinationAccountType"`
+	DestinationAddress         string                 `json:"destinationAddress"`
+	IsDestinationPhishing      bool                   `json:"isDestinationPhishing"`
+	Memo                       string                 `json:"memo"`
+	DestinationAddressList     []DestinationAddress   `json:"destinationAddressList"`
+	DestinationTag             string                 `json:"destinationTag"`
+	TransactionType            string                 `json:"transactionType"`
+	TransactionStatus          string                 `json:"transactionStatus"`
+	TransactionSubStatus       string                 `json:"transactionSubStatus"`
+	CreateTime                 int64                  `json:"createTime"`
+	Note                       string                 `json:"note"`
+	AuditUserKey               string                 `json:"auditUserKey"`
+	CreatedByUserKey           string                 `json:"createdByUserKey"`
+	TxFee                      string                 `json:"txFee"`
+	FeeCoinKey                 string                 `json:"feeCoinKey"`
+	GasFee                     []GasFee               `json:"gasFee"`
+	ReplaceTxHash              string                 `json:"replaceTxHash"`
+	CustomerRefId              string                 `json:"customerRefId"`
+	Nonce                      string                 `json:"nonce"`
+	ReplacedTxKey              string                 `json:"replacedTxKey"`
+	ReplacedCustomerRefId      string                 `json:"replacedCustomerRefId"`
+	CustomerExt1               string                 `json:"customerExt1"`
+	CustomerExt2               string                 `json:"customerExt2"`
+	AmlLock                    string                 `json:"amlLock"`
+	BlockHeight                int64                  `json:"blockHeight"`
+	CompletedTime              int64                  `json:"completedTime"`
+	RealDestinationAccountType string                 `json:"realDestinationAccountType"`
+	TxAmountToUsd              string                 `json:"txAmountToUsd"`
+	SourceAccountName          string                 `json:"sourceAccountName"`
+	DestinationAccountName     string                 `json:"destinationAccountName"`
+	AuditUserName              string                 `json:"auditUserName"`
+	CreatedByUserName          string                 `json:"createdByUserName"`
+	SpeedUpHistory             []TransactionsResponse `json:"speedUpHistory"`
+	TransactionDirection       string                 `json:"transactionDirection"`
 }
 
 func (e *TransactionApi) OneTransactions(d OneTransactionsRequest, r *OneTransactionsResponse) error {
