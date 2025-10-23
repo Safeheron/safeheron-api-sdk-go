@@ -19,8 +19,8 @@ type GasBalance struct {
 }
 
 type Configuration struct {
-	Symbol string `json:"network"`
-	Amount bool   `json:"enabled"`
+	Network string `json:"network"`
+	Enabled bool   `json:"enabled"`
 }
 
 func (e *GasApi) GasStatus(r *GasStatusResponse) error {
