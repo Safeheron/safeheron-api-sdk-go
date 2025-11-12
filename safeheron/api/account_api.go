@@ -56,6 +56,14 @@ func (e *AccountApi) OneAccounts(d OneAccountRequest, r *AccountResponse) error 
 	return e.Client.SendRequest(d, r, "/v1/account/one")
 }
 
+type OneAccountByAddressRequest struct {
+	Address string `json:"address,omitempty"`
+}
+
+func (e *AccountApi) GetAccountByAddress(d OneAccountByAddressRequest, r *AccountResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/account/getByAddress")
+}
+
 type CreateAccountRequest struct {
 	AccountName   string   `json:"accountName,omitempty"`
 	CustomerRefId string   `json:"customerRefId,omitempty"`
