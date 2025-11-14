@@ -69,6 +69,15 @@ func (e *Web3Api) ListWeb3Accounts(d ListWeb3AccountRequest, r *[]CreateWeb3Acco
 	return e.Client.SendRequest(d, r, "/v1/web3/account/list")
 }
 
+type OneWeb3AccountRequest struct {
+	AccountKey    string `json:"accountKey,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
+}
+
+func (e *Web3Api) OneWeb3Account(d OneWeb3AccountRequest, r *CreateWeb3AccountResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/web3/account/one")
+}
+
 type EthSignRequest struct {
 	AccountKey       string `json:"accountKey"`
 	CustomerRefId    string `json:"customerRefId"`
