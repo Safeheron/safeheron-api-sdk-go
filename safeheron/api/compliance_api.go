@@ -13,7 +13,7 @@ type KytReportRequest struct {
 	CustomerRefId string `json:"customerRefId,omitempty"`
 }
 
-type KytRepostResponse struct {
+type KytReportResponse struct {
 	TxKey         string          `json:"txKey"`
 	CustomerRefId string          `json:"customerRefId"`
 	AmlList       []AmlAndPayload `json:"amlList"`
@@ -28,6 +28,6 @@ type AmlAndPayload struct {
 	Payload        any    `json:"payload"`
 }
 
-func (e *ComplianceApi) KytReport(d KytReportRequest, r *KytRepostResponse) error {
+func (e *ComplianceApi) KytReport(d KytReportRequest, r *KytReportResponse) error {
 	return e.Client.SendRequest(d, r, "/v1/compliance/kyt/report")
 }
