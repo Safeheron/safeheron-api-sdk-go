@@ -52,6 +52,7 @@ type TransactionsResponse struct {
 	AuditUserName              string               `json:"auditUserName"`
 	CreatedByUserName          string               `json:"createdByUserName"`
 	TransactionDirection       string               `json:"transactionDirection"`
+	AmlList                    []Aml                `json:"amlList"`
 }
 
 type ListTransactionsV1Request struct {
@@ -277,6 +278,15 @@ type OneTransactionsResponse struct {
 	CreatedByUserName          string                 `json:"createdByUserName"`
 	SpeedUpHistory             []TransactionsResponse `json:"speedUpHistory"`
 	TransactionDirection       string                 `json:"transactionDirection"`
+	AmlList                    []Aml                  `json:"amlList"`
+}
+
+type Aml struct {
+	Provider       string `json:"provider"`
+	Timestamp      string `json:"timestamp"`
+	Status         string `json:"status"`
+	RiskLevel      string `json:"riskLevel"`
+	LastUpdateTime string `json:"lastUpdateTime"`
 }
 
 func (e *TransactionApi) OneTransactions(d OneTransactionsRequest, r *OneTransactionsResponse) error {
