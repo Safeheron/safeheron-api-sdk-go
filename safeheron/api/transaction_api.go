@@ -52,6 +52,7 @@ type TransactionsResponse struct {
 	AuditUserName              string               `json:"auditUserName"`
 	CreatedByUserName          string               `json:"createdByUserName"`
 	TransactionDirection       string               `json:"transactionDirection"`
+	AmlScreeningTriggeredState string               `json:"amlScreeningTriggeredState"`
 	AmlList                    []Aml                `json:"amlList"`
 }
 
@@ -278,6 +279,7 @@ type OneTransactionsResponse struct {
 	CreatedByUserName          string                 `json:"createdByUserName"`
 	SpeedUpHistory             []TransactionsResponse `json:"speedUpHistory"`
 	TransactionDirection       string                 `json:"transactionDirection"`
+	AmlScreeningTriggeredState string                 `json:"amlScreeningTriggeredState"`
 	AmlList                    []Aml                  `json:"amlList"`
 }
 
