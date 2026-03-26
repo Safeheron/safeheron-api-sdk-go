@@ -45,22 +45,41 @@ func (c *WebhookConverter) Convert(d WebHook) (string, error) {
 	}
 	// Use your RSA private key to decrypt response's aesKey and aesIv
 	var plaintext []byte
+	var err error
+
 	if d.RsaType == utils.ECB_OAEP {
-		plaintext, _ = utils.DecryptWithOAEP(d.Key, c.Config.WebHookRsaPrivateKey)
+		plaintext, err = utils.DecryptWithOAEP(d.Key, c.Config.WebHookRsaPrivateKey)
 	} else {
-		plaintext, _ = utils.DecryptWithRSA(d.Key, c.Config.WebHookRsaPrivateKey)
+		plaintext, err = utils.DecryptWithRSA(d.Key, c.Config.WebHookRsaPrivateKey)
+	}
+
+	if err != nil {
+		return "", errors.New("RSA decryption failed")
+	}
+
+	if len(plaintext) < 32 {
+		return "", errors.New("decrypted plaintext length is invalid")
 	}
 
 	resAesKey := plaintext[:32]
 	resAesIv := plaintext[32:]
 	// Use AES to decrypt bizContent
-	ciphertext, _ := base64.StdEncoding.DecodeString(d.BizContent)
+	ciphertext, err := base64.StdEncoding.DecodeString(d.BizContent)
+	if err != nil {
+		return "", errors.New("base64 decode failed")
+	}
+
 	var webHookContent []byte
 	if d.AesType == utils.GCM {
-		webHookContent, _ = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
+		webHookContent, err = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
 	} else {
-		webHookContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+		webHookContent, err = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
 	}
+
+	if err != nil {
+		return "", errors.New("AES decryption failed")
+	}
+
 	return string(webHookContent), nil
 }
 

@@ -69,21 +69,40 @@ func (c *CoSignerConverter) RequestConvert(d CoSignerCallBack) (string, error) {
 	}
 	// Use your RSA private key to decrypt response's aesKey and aesIv
 	var plaintext []byte
+	var err error
 	if d.RsaType == utils.ECB_OAEP {
-		plaintext, _ = utils.DecryptWithOAEP(d.Key, c.Config.getApprovalCallbackServicePrivateKey())
+		plaintext, err = utils.DecryptWithOAEP(d.Key, c.Config.getApprovalCallbackServicePrivateKey())
 	} else {
-		plaintext, _ = utils.DecryptWithRSA(d.Key, c.Config.getApprovalCallbackServicePrivateKey())
+		plaintext, err = utils.DecryptWithRSA(d.Key, c.Config.getApprovalCallbackServicePrivateKey())
 	}
+
+	if err != nil {
+		return "", errors.New("co-signer RSA decryption failed")
+	}
+
+	if len(plaintext) < 48 {
+		return "", errors.New("co-signer decrypted plaintext length is invalid")
+	}
+
 	resAesKey := plaintext[:32]
-	resAesIv := plaintext[32:]
+	resAesIv := plaintext[32:48]
 	// Use AES to decrypt bizContent
-	ciphertext, _ := base64.StdEncoding.DecodeString(d.BizContent)
+	ciphertext, err := base64.StdEncoding.DecodeString(d.BizContent)
+	if err != nil {
+		return "", errors.New("bizContent base64 decode failed")
+	}
+
 	var callBackContent []byte
 	if d.AesType == utils.GCM {
-		callBackContent, _ = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
+		callBackContent, err = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
 	} else {
-		callBackContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+		callBackContent, err = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
 	}
+
+	if err != nil {
+		return "", errors.New("co-signer AES decryption failed")
+	}
+
 	return string(callBackContent), nil
 }
 

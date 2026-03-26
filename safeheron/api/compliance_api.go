@@ -14,9 +14,10 @@ type KytReportRequest struct {
 }
 
 type KytReportResponse struct {
-	TxKey         string      `json:"txKey"`
-	CustomerRefId string      `json:"customerRefId"`
-	AmlList       []AmlReport `json:"amlList"`
+	TxKey                      string      `json:"txKey"`
+	CustomerRefId              string      `json:"customerRefId"`
+	AmlScreeningTriggeredState string      `json:"amlScreeningTriggeredState"`
+	AmlList                    []AmlReport `json:"amlList"`
 }
 
 type AmlReport struct {

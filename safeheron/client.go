@@ -112,20 +112,39 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 
 	var plaintext []byte
 	if utils.ECB_OAEP == responseStruct.RsaType {
-		plaintext, _ = utils.DecryptWithOAEP(responseStruct.Key, c.Config.RsaPrivateKey)
+		plaintext, err = utils.DecryptWithOAEP(responseStruct.Key, c.Config.RsaPrivateKey)
 	} else {
-		plaintext, _ = utils.DecryptWithRSA(responseStruct.Key, c.Config.RsaPrivateKey)
+		plaintext, err = utils.DecryptWithRSA(responseStruct.Key, c.Config.RsaPrivateKey)
 	}
+
+	if err != nil {
+		return nil, errors.New("API response RSA decryption failed")
+	}
+
+	if len(plaintext) < 48 {
+		return nil, errors.New("API response decrypted plaintext length is invalid")
+	}
+
 	resAesKey := plaintext[:32]
-	resAesIv := plaintext[32:]
+	resAesIv := plaintext[32:48]
 	// Use AES to decrypt bizContent
-	ciphertext, _ := base64.StdEncoding.DecodeString(responseStruct.BizContent)
+	ciphertext, err := base64.StdEncoding.DecodeString(responseStruct.BizContent)
+
+	if err != nil {
+		return nil, errors.New("bizContent base64 decode failed")
+	}
+
 	var respContent []byte
 	if utils.GCM == responseStruct.AesType {
-		respContent, _ = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
+		respContent, err = utils.NewGCMDecrypter(resAesKey, resAesIv, ciphertext)
 	} else {
-		respContent, _ = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
+		respContent, err = utils.NewCBCDecrypter(resAesKey, resAesIv, ciphertext)
 	}
+
+	if err != nil {
+		return nil, errors.New("API response AES decryption failed")
+	}
+
 	return respContent, nil
 }
 
