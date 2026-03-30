@@ -24,6 +24,19 @@ import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
 
 and run `go get` without parameters.
 
+# AI-Powered Development
+
+Use the **Safeheron Skill** with [Claude Code](https://claude.ai/code) or Cursor to generate, debug, and troubleshoot Safeheron API integrations using natural language.
+
+**Example prompts:**
+- "Help me set up an API Co-Signer approval callback service"
+- "Write a Webhook handler to process incoming transaction events"
+- "What causes error 1012 and how do I fix it?"
+
+**Get started:**
+
+View the Skill source code on GitHub: [safeheron/safeheron-skill](https://github.com/safeheron/safeheron-skill)
+
 # Usage
 ```go
 import "github.com/Safeheron/safeheron-api-sdk-go/safeheron"
