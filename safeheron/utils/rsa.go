@@ -16,14 +16,14 @@ import (
 
 const ECB_OAEP = "ECB_OAEP"
 
-func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
+func SignParamsWithRSA(data string, privateKeyPathOrStr string) (string, error) {
 	// Sign data with your RSA private key
 	var privateKey *rsa.PrivateKey
 	var err error
-	if strings.HasSuffix(privateKeyPath, ".pem") {
-		privateKey, err = loadPrivateKeyFromPath(privateKeyPath)
+	if strings.HasSuffix(privateKeyPathOrStr, ".pem") {
+		privateKey, err = loadPrivateKeyFromPath(privateKeyPathOrStr)
 	} else {
-		privateKey, err = ParsePrivateKey(privateKeyPath)
+		privateKey, err = ParsePrivateKey(privateKeyPathOrStr)
 	}
 	if err != nil {
 		return "", err
@@ -39,14 +39,14 @@ func SignParamsWithRSA(data string, privateKeyPath string) (string, error) {
 	return b64sig, err
 }
 
-func SignParamsWithRSAPSS(data string, privateKeyPath string) (string, error) {
+func SignParamsWithRSAPSS(data string, privateKeyPathOrStr string) (string, error) {
 	// Sign data with your RSA private key
 	var privateKey *rsa.PrivateKey
 	var err error
-	if strings.HasSuffix(privateKeyPath, ".pem") {
-		privateKey, err = loadPrivateKeyFromPath(privateKeyPath)
+	if strings.HasSuffix(privateKeyPathOrStr, ".pem") {
+		privateKey, err = loadPrivateKeyFromPath(privateKeyPathOrStr)
 	} else {
-		privateKey, err = ParsePrivateKey(privateKeyPath)
+		privateKey, err = ParsePrivateKey(privateKeyPathOrStr)
 	}
 	if err != nil {
 		return "", err
@@ -63,13 +63,13 @@ func SignParamsWithRSAPSS(data string, privateKeyPath string) (string, error) {
 	return b64sig, err
 }
 
-func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
+func DecryptWithRSA(base64Data string, privateKeyPathOrStr string) ([]byte, error) {
 	var privateKey *rsa.PrivateKey
 	var err error
-	if strings.HasSuffix(privateKeyPath, ".pem") {
-		privateKey, err = loadPrivateKeyFromPath(privateKeyPath)
+	if strings.HasSuffix(privateKeyPathOrStr, ".pem") {
+		privateKey, err = loadPrivateKeyFromPath(privateKeyPathOrStr)
 	} else {
-		privateKey, err = ParsePrivateKey(privateKeyPath)
+		privateKey, err = ParsePrivateKey(privateKeyPathOrStr)
 	}
 	if err != nil {
 		return nil, err
@@ -87,13 +87,13 @@ func DecryptWithRSA(base64Data string, privateKeyPath string) ([]byte, error) {
 	return plaintext, nil
 }
 
-func DecryptWithOAEP(base64Data string, privateKeyPath string) ([]byte, error) {
+func DecryptWithOAEP(base64Data string, privateKeyPathOrStr string) ([]byte, error) {
 	var privateKey *rsa.PrivateKey
 	var err error
-	if strings.HasSuffix(privateKeyPath, ".pem") {
-		privateKey, err = loadPrivateKeyFromPath(privateKeyPath)
+	if strings.HasSuffix(privateKeyPathOrStr, ".pem") {
+		privateKey, err = loadPrivateKeyFromPath(privateKeyPathOrStr)
 	} else {
-		privateKey, err = ParsePrivateKey(privateKeyPath)
+		privateKey, err = ParsePrivateKey(privateKeyPathOrStr)
 	}
 	if err != nil {
 		return nil, err
@@ -155,13 +155,13 @@ func ParsePrivateKey(privKeyStr string) (*rsa.PrivateKey, error) {
 	return key.(*rsa.PrivateKey), nil
 }
 
-func EncryptWithRSA(data []byte, publicKeyPath string) (string, error) {
+func EncryptWithRSA(data []byte, publicKeyPathOrStr string) (string, error) {
 	var pubKey *rsa.PublicKey
 	var err error
-	if strings.HasSuffix(publicKeyPath, ".pem") {
-		pubKey, err = loadPublicKeyFromPath(publicKeyPath)
+	if strings.HasSuffix(publicKeyPathOrStr, ".pem") {
+		pubKey, err = loadPublicKeyFromPath(publicKeyPathOrStr)
 	} else {
-		pubKey, err = ParsePublicKey(publicKeyPath)
+		pubKey, err = ParsePublicKey(publicKeyPathOrStr)
 	}
 	if err != nil {
 		return "", err
@@ -175,13 +175,13 @@ func EncryptWithRSA(data []byte, publicKeyPath string) (string, error) {
 	return ciphertext, nil
 }
 
-func EncryptWithOAEP(data []byte, publicKeyPath string) (string, error) {
+func EncryptWithOAEP(data []byte, publicKeyPathOrStr string) (string, error) {
 	var pubKey *rsa.PublicKey
 	var err error
-	if strings.HasSuffix(publicKeyPath, ".pem") {
-		pubKey, err = loadPublicKeyFromPath(publicKeyPath)
+	if strings.HasSuffix(publicKeyPathOrStr, ".pem") {
+		pubKey, err = loadPublicKeyFromPath(publicKeyPathOrStr)
 	} else {
-		pubKey, err = ParsePublicKey(publicKeyPath)
+		pubKey, err = ParsePublicKey(publicKeyPathOrStr)
 	}
 	if err != nil {
 		return "", err
@@ -195,16 +195,16 @@ func EncryptWithOAEP(data []byte, publicKeyPath string) (string, error) {
 	return ciphertext, nil
 }
 
-func VerifySignWithRSA(data string, base64Sign string, rasPublicKeyPath string) bool {
+func VerifySignWithRSA(data string, base64Sign string, raspublicKeyPathOrStr string) bool {
 	sign, err := base64.StdEncoding.DecodeString(base64Sign)
 	if err != nil {
 		return false
 	}
 	var publicKey *rsa.PublicKey
-	if strings.HasSuffix(rasPublicKeyPath, ".pem") {
-		publicKey, err = loadPublicKeyFromPath(rasPublicKeyPath)
+	if strings.HasSuffix(raspublicKeyPathOrStr, ".pem") {
+		publicKey, err = loadPublicKeyFromPath(raspublicKeyPathOrStr)
 	} else {
-		publicKey, err = ParsePublicKey(rasPublicKeyPath)
+		publicKey, err = ParsePublicKey(raspublicKeyPathOrStr)
 	}
 	if err != nil {
 		return false
@@ -214,17 +214,17 @@ func VerifySignWithRSA(data string, base64Sign string, rasPublicKeyPath string) 
 	return err == nil
 }
 
-func VerifySignWithRSAPSS(data string, base64Sign string, rasPublicKeyPath string) bool {
+func VerifySignWithRSAPSS(data string, base64Sign string, raspublicKeyPathOrStr string) bool {
 	sign, err := base64.StdEncoding.DecodeString(base64Sign)
 	if err != nil {
 		return false
 	}
 
 	var publicKey *rsa.PublicKey
-	if strings.HasSuffix(rasPublicKeyPath, ".pem") {
-		publicKey, err = loadPublicKeyFromPath(rasPublicKeyPath)
+	if strings.HasSuffix(raspublicKeyPathOrStr, ".pem") {
+		publicKey, err = loadPublicKeyFromPath(raspublicKeyPathOrStr)
 	} else {
-		publicKey, err = ParsePublicKey(rasPublicKeyPath)
+		publicKey, err = ParsePublicKey(raspublicKeyPathOrStr)
 	}
 	if err != nil {
 		return false
