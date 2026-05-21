@@ -8,6 +8,10 @@ type GasApi struct {
 	Client safeheron.Client
 }
 
+type GasStatusRequest struct {
+	NetworkMode string `json:"networkMode,omitempty"`
+}
+
 type GasStatusResponse struct {
 	GasBalance    []GasBalance    `json:"gasBalance"`
 	Configuration []Configuration `json:"configuration"`
@@ -23,8 +27,8 @@ type Configuration struct {
 	Enabled bool   `json:"enabled"`
 }
 
-func (e *GasApi) GasStatus(r *GasStatusResponse) error {
-	return e.Client.SendRequest(nil, r, "/v1/gas/status")
+func (e *GasApi) GasStatus(d GasStatusRequest, r *GasStatusResponse) error {
+	return e.Client.SendRequest(d, r, "/v1/gas/status")
 }
 
 type GasTransactionsGetByTxKeyRequest struct {

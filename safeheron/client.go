@@ -58,7 +58,6 @@ func (c Client) execute(request any, endpoint string) ([]byte, error) {
 	if request != nil {
 		payLoad, _ := json.Marshal(request)
 		data := string(payLoad)
-		log.Infof("send request data: %s", data)
 		encryptBizContent, err := utils.EncryContentWithAESGCM(data, aesKey, aesIv)
 		if err != nil {
 			return nil, err

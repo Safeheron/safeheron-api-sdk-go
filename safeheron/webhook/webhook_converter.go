@@ -57,12 +57,12 @@ func (c *WebhookConverter) Convert(d WebHook) (string, error) {
 		return "", errors.New("RSA decryption failed")
 	}
 
-	if len(plaintext) < 32 {
+	if len(plaintext) < 48 {
 		return "", errors.New("decrypted plaintext length is invalid")
 	}
 
 	resAesKey := plaintext[:32]
-	resAesIv := plaintext[32:]
+	resAesIv := plaintext[32:48]
 	// Use AES to decrypt bizContent
 	ciphertext, err := base64.StdEncoding.DecodeString(d.BizContent)
 	if err != nil {
