@@ -19,6 +19,7 @@ type CreateWeb3AccountResponse struct {
 	CustomerRefId string `json:"customerRefId"`
 	AccountName   string `json:"accountName"`
 	HiddenOnUI    bool   `json:"hiddenOnUI"`
+	Archived      bool   `json:"archived"`
 	PubKeyList    []struct {
 		SignAlg string `json:"signAlg"`
 		PubKey  string `json:"pubKey"`
@@ -63,6 +64,8 @@ type ListWeb3AccountRequest struct {
 	FromId        string `json:"fromId,omitempty"`
 	NamePrefix    string `json:"namePrefix,omitempty"`
 	CustomerRefId string `json:"customerRefId,omitempty"`
+	HiddenOnUI    *bool  `json:"hiddenOnUI,omitempty"`
+	Archived      *bool  `json:"archived,omitempty"`
 }
 
 func (e *Web3Api) ListWeb3Accounts(d ListWeb3AccountRequest, r *[]CreateWeb3AccountResponse) error {
@@ -205,7 +208,7 @@ type Web3SignQueryResponse struct {
 		} `json:"sig,omitempty"`
 	} `json:"transaction"`
 	Message struct {
-		ChainId int64  `json:"hash,omitempty"`
+		ChainId int64  `json:"chainId,omitempty"`
 		Data    string `json:"data,omitempty"`
 		Sig     struct {
 			Hash string `json:"hash,omitempty"`
@@ -213,7 +216,7 @@ type Web3SignQueryResponse struct {
 		} `json:"sig,omitempty"`
 	} `json:"message,omitempty"`
 	MessageHash struct {
-		ChainId int64 `json:"hash,omitempty"`
+		ChainId int64 `json:"chainId,omitempty"`
 		SigList []struct {
 			Hash string `json:"hash,omitempty"`
 			Sig  string `json:"sig,omitempty"`

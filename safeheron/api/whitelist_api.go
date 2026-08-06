@@ -48,6 +48,7 @@ type WhitelistResponse struct {
 	Address         string `json:"address,omitempty"`
 	Memo            string `json:"memo,omitempty"`
 	WhitelistStatus string `json:"whitelistStatus,omitempty"`
+	HiddenOnUI      bool   `json:"hiddenOnUI,omitempty"`
 	CreateTime      int64  `json:"createTime,omitempty"`
 	LastUpdateTime  int64  `json:"lastUpdateTime,omitempty"`
 }
@@ -62,6 +63,7 @@ type ListWhitelistRequest struct {
 	FromId          string `json:"fromId,omitempty"`
 	ChainType       string `json:"chainType,omitempty"`
 	WhitelistStatus string `json:"whitelistStatus,omitempty"`
+	HiddenOnUI      *bool  `json:"hiddenOnUI,omitempty"`
 	CreateTimeMin   int64  `json:"createTimeMin,omitempty"`
 	CreateTimeMax   int64  `json:"createTimeMax,omitempty"`
 }

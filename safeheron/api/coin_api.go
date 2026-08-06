@@ -51,17 +51,19 @@ func (e *CoinApi) ListCoinMaintain(r *CoinMaintainResponse) error {
 }
 
 type CheckCoinAddressRequest struct {
-	CoinKey           string `json:"coinKey"`
-	Address           string `json:"address"`
-	CheckContract     bool   `json:"checkContract,omitempty"`
-	CheckAml          bool   `json:"checkAml,omitempty"`
-	CheckAddressValid bool   `json:"checkAddressValid,omitempty"`
+	CoinKey                 string `json:"coinKey"`
+	Address                 string `json:"address"`
+	CheckContract           bool   `json:"checkContract,omitempty"`
+	CheckAml                bool   `json:"checkAml,omitempty"`
+	CheckAddressValid       bool   `json:"checkAddressValid,omitempty"`
+	CheckSolanaOwnerAddress bool   `json:"checkSolanaOwnerAddress,omitempty"`
 }
 
 type CheckCoinAddressResponse struct {
-	Contract     bool `json:"contract"`
-	AmlValid     bool `json:"amlValid"`
-	AddressValid bool `json:"addressValid"`
+	Contract           bool `json:"contract"`
+	AmlValid           bool `json:"amlValid"`
+	AddressValid       bool `json:"addressValid"`
+	SolanaOwnerAddress bool `json:"solanaOwnerAddress"`
 }
 
 func (e *CoinApi) CheckCoinAddress(d CheckCoinAddressRequest, r *CheckCoinAddressResponse) error {
