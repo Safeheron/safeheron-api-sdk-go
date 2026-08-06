@@ -145,6 +145,7 @@ type CreateTransactionsRequest struct {
 	Nonce                  int64      `json:"nonce,omitempty"`
 	SequenceNumber         int64      `json:"sequenceNumber,omitempty"`
 	BalanceVerifyType      string     `json:"balanceVerifyType,omitempty"`
+	UtxoSelectionType      string     `json:"utxoSelectionType,omitempty"`
 }
 
 type FeeRateDto struct {
@@ -192,6 +193,7 @@ type CreateTransactionsUTXOMultiDestRequest struct {
 	DestinationTag         string               `json:"destinationTag,omitempty"`
 	IsRbf                  bool                 `json:"isRbf,omitempty"`
 	FailOnAml              *bool                `json:"failOnAml,omitempty"`
+	UtxoSelectionType      string               `json:"utxoSelectionType,omitempty"`
 }
 
 type SourceAddress struct {
@@ -341,6 +343,7 @@ type Member struct {
 	AuditUserName  string `json:"auditUserName"`
 	IsCoSigner     bool   `json:"isCoSigner"`
 	ApprovalStatus string `json:"approvalStatus"`
+	Remark         string `json:"remark"`
 }
 
 func (e *TransactionApi) ApprovalDetailTransactions(d ApprovalDetailTransactionsRequest, r *ApprovalDetailTransactionsResponse) error {
@@ -355,6 +358,7 @@ type TransactionsFeeRateRequest struct {
 	DestinationAddress     string               `json:"destinationAddress"`
 	DestinationAddressList []DestinationAddress `json:"destinationAddressList"`
 	Value                  string               `json:"value,omitempty"`
+	Memo                   string               `json:"memo,omitempty"`
 }
 
 type FeeRate struct {
@@ -365,7 +369,7 @@ type FeeRate struct {
 	MaxPriorityFee string `json:"maxPriorityFee"`
 	MaxFee         string `json:"maxFee"`
 	BytesSize      string `json:"bytesSize"`
-	GasPremium     string `json:"gasPremium "`
+	GasPremium     string `json:"gasPremium"`
 	GasFeeCap      string `json:"gasFeeCap"`
 	GasBudget      string `json:"gasBudget"`
 	GasUnitPrice   string `json:"gasUnitPrice"`

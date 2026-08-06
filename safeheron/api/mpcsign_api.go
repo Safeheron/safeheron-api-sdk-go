@@ -10,6 +10,8 @@ type MpcSignApi struct {
 
 type CreateMpcSignRequest struct {
 	CustomerRefId    string `json:"customerRefId,omitempty"`
+	CustomerExt1     string `json:"customerExt1,omitempty"`
+	CustomerExt2     string `json:"customerExt2,omitempty"`
 	SourceAccountKey string `json:"sourceAccountKey,omitempty"`
 	SignAlg          string `json:"signAlg,omitempty"`
 	DataList         []struct {
