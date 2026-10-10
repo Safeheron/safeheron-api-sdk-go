@@ -14,6 +14,7 @@ type CreateWhitelistRequest struct {
 	Address       string `json:"address,omitempty"`
 	Memo          string `json:"memo,omitempty"`
 	HiddenOnUI    bool   `json:"hiddenOnUI,omitempty"`
+	Note          string `json:"note,omitempty"`
 }
 
 type CreateWhitelistResponse struct {
@@ -30,6 +31,7 @@ type CreateFromTransactionWhitelistRequest struct {
 	DestinationAddress string `json:"destinationAddress,omitempty"`
 	Memo               string `json:"memo,omitempty"`
 	HiddenOnUI         bool   `json:"hiddenOnUI,omitempty"`
+	Note               string `json:"note,omitempty"`
 }
 
 func (e *WhitelistApi) CreateFromTransactionWhitelist(d CreateFromTransactionWhitelistRequest, r *CreateWhitelistResponse) error {
@@ -48,6 +50,7 @@ type WhitelistResponse struct {
 	Address         string `json:"address,omitempty"`
 	Memo            string `json:"memo,omitempty"`
 	WhitelistStatus string `json:"whitelistStatus,omitempty"`
+	Note            string `json:"note,omitempty"`
 	CreateTime      int64  `json:"createTime,omitempty"`
 	LastUpdateTime  int64  `json:"lastUpdateTime,omitempty"`
 }
@@ -76,6 +79,7 @@ type EditWhitelistRequest struct {
 	Address       string `json:"address,omitempty"`
 	Memo          string `json:"memo,omitempty"`
 	Force         bool   `json:"force,omitempty"`
+	Note          string `json:"note,omitempty"`
 }
 
 func (e *WhitelistApi) EditWhitelist(d EditWhitelistRequest, r *ResultResponse) error {
