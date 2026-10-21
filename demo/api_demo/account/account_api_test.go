@@ -33,6 +33,22 @@ func TestListAccounts(t *testing.T) {
 
 }
 
+func TestListAccountsV2(t *testing.T) {
+	req := api.ListAccountV2Request{
+		Direct: "NEXT",
+		Limit:  10,
+	}
+
+	var res api.ListAccountV2Response
+	err := accountApi.ListAccountsV2(req, &res)
+	assert.Nil(t, err)
+
+	for _, account := range res {
+		log.Infof("accountKey: %s, accountName: %s", account.AccountKey, account.AccountName)
+	}
+
+}
+
 func TestCreateAccountAndAddCoin(t *testing.T) {
 	createAccountRequest := api.CreateAccountRequest{
 		AccountName: "first-wallet-account",
