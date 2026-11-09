@@ -47,6 +47,24 @@ func (e *AccountApi) ListAccounts(d ListAccountRequest, r *ListAccountResponse) 
 	return e.Client.SendRequest(d, r, "/v1/account/list")
 }
 
+type ListAccountV2Request struct {
+	Direct        string `json:"direct,omitempty"`
+	Limit         int32  `json:"limit,omitempty"`
+	FromId        string `json:"fromId,omitempty"`
+	HiddenOnUI    *bool  `json:"hiddenOnUI,omitempty"`
+	AutoFuel      *bool  `json:"autoFuel,omitempty"`
+	Archived      *bool  `json:"archived,omitempty"`
+	NamePrefix    string `json:"namePrefix,omitempty"`
+	NameSuffix    string `json:"nameSuffix,omitempty"`
+	CustomerRefId string `json:"customerRefId,omitempty"`
+}
+
+type ListAccountV2Response []AccountResponse
+
+func (e *AccountApi) ListAccountsV2(d ListAccountV2Request, r *ListAccountV2Response) error {
+	return e.Client.SendRequest(d, r, "/v2/account/list")
+}
+
 type OneAccountRequest struct {
 	AccountKey    string `json:"accountKey,omitempty"`
 	CustomerRefId string `json:"customerRefId,omitempty"`
